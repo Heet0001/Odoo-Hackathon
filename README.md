@@ -192,4 +192,3 @@ All data is stored in browser localStorage, so it persists across sessions. The 
 ## License
 
 © 2024 GearGuard Maintenance Systems. All rights reserved.
-
