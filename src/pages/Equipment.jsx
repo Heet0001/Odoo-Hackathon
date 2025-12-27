@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
 
 const Equipment = () => {
-  const { equipment, addEquipment, updateEquipment, deleteEquipment, getEquipmentRequests, getOpenRequestsCount } = useApp()
+  const { equipment, addEquipment, updateEquipment, deleteEquipment, getEquipmentRequests, getOpenRequestsCount, equipmentCategories, teams, workCenters } = useApp()
   const { id } = useParams()
   const navigate = useNavigate()
   
@@ -11,10 +11,13 @@ const Equipment = () => {
   const [groupBy, setGroupBy] = useState('none') // 'none', 'department', 'employee', 'team'
   const [showForm, setShowForm] = useState(false)
   const [selectedEquipment, setSelectedEquipment] = useState(null)
+  const [activeTab, setActiveTab] = useState('new') // 'new' or 'component'
   const [formData, setFormData] = useState({
     name: '',
     serialNumber: '',
     category: '',
+    company: 'My Company (Our Branch)',
+    usedBy: '',
     department: '',
     employee: '',
     location: '',
@@ -22,6 +25,10 @@ const Equipment = () => {
     warrantyInfo: '',
     maintenanceTeam: '',
     assignedTechnician: '',
+    assignedDate: '',
+    workCenter: '',
+    status: 'operational',
+    description: '',
   })
 
   // Filter and group equipment
@@ -78,6 +85,8 @@ const Equipment = () => {
       name: '',
       serialNumber: '',
       category: '',
+      company: 'My Company (Our Branch)',
+      usedBy: '',
       department: '',
       employee: '',
       location: '',
@@ -85,16 +94,23 @@ const Equipment = () => {
       warrantyInfo: '',
       maintenanceTeam: '',
       assignedTechnician: '',
+      assignedDate: '',
+      workCenter: '',
+      status: 'operational',
+      description: '',
     })
     setSelectedEquipment(null)
+    setActiveTab('new')
   }
 
   const handleEdit = (eq) => {
     setSelectedEquipment(eq)
     setFormData({
-      name: eq.name,
-      serialNumber: eq.serialNumber,
-      category: eq.category,
+      name: eq.name || '',
+      serialNumber: eq.serialNumber || '',
+      category: eq.category || '',
+      company: eq.company || 'My Company (Our Branch)',
+      usedBy: eq.usedBy || '',
       department: eq.department || '',
       employee: eq.employee || '',
       location: eq.location || '',
@@ -102,6 +118,10 @@ const Equipment = () => {
       warrantyInfo: eq.warrantyInfo || '',
       maintenanceTeam: eq.maintenanceTeam || '',
       assignedTechnician: eq.assignedTechnician || '',
+      assignedDate: eq.assignedDate || '',
+      workCenter: eq.workCenter || '',
+      status: eq.status || 'operational',
+      description: eq.description || '',
     })
     setShowForm(true)
   }
@@ -121,6 +141,11 @@ const Equipment = () => {
     }
     return colors[status] || colors.operational
   }
+
+  // Get available technicians for selected team
+  const availableTechnicians = formData.maintenanceTeam
+    ? (teams.find(t => t.name === formData.maintenanceTeam)?.members || [])
+    : []
 
   const renderEquipmentList = (equipmentList) => {
     return (
@@ -297,7 +322,7 @@ const Equipment = () => {
         {/* Add/Edit Form Modal */}
         {showForm && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white dark:bg-[#1e293b] rounded-xl border border-slate-200 dark:border-slate-700 shadow-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="bg-white dark:bg-[#1e293b] rounded-xl border border-slate-200 dark:border-slate-700 shadow-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
               <div className="p-6 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
                 <h3 className="text-xl font-bold text-slate-900 dark:text-white">
                   {selectedEquipment ? 'Edit Equipment' : 'New Equipment'}
@@ -306,12 +331,42 @@ const Equipment = () => {
                   onClick={() => {
                     setShowForm(false)
                     setSelectedEquipment(null)
+                    setActiveTab('new')
                   }}
                   className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
                 >
                   <span className="material-symbols-outlined">close</span>
                 </button>
               </div>
+              
+              {/* Tabs */}
+              <div className="border-b border-slate-200 dark:border-slate-700 px-6">
+                <div className="flex gap-4">
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('new')}
+                    className={`px-4 py-2 border-b-2 transition-colors ${
+                      activeTab === 'new'
+                        ? 'border-primary text-primary font-medium'
+                        : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    }`}
+                  >
+                    New
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('component')}
+                    className={`px-4 py-2 border-b-2 transition-colors ${
+                      activeTab === 'component'
+                        ? 'border-primary text-primary font-medium'
+                        : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    }`}
+                  >
+                    Component
+                  </button>
+                </div>
+              </div>
+
               <form onSubmit={handleSubmit} className="p-6 space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
@@ -325,22 +380,66 @@ const Equipment = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-slate-900 dark:text-white mb-2">Serial Number *</label>
+                    <label className="block text-sm font-medium text-slate-900 dark:text-white mb-2">Equipment Category</label>
+                    <select
+                      value={formData.category}
+                      onChange={(e) => setFormData({...formData, category: e.target.value})}
+                      className="w-full h-10 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 text-sm text-slate-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+                    >
+                      <option value="">Select Category</option>
+                      {equipmentCategories.map(cat => (
+                        <option key={cat.id} value={cat.name}>{cat.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-900 dark:text-white mb-2">Company</label>
                     <input
                       type="text"
-                      required
-                      value={formData.serialNumber}
-                      onChange={(e) => setFormData({...formData, serialNumber: e.target.value})}
+                      value={formData.company}
+                      onChange={(e) => setFormData({...formData, company: e.target.value})}
                       className="w-full h-10 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 text-sm text-slate-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-slate-900 dark:text-white mb-2">Category</label>
+                    <label className="block text-sm font-medium text-slate-900 dark:text-white mb-2">Used By?</label>
                     <input
                       type="text"
-                      value={formData.category}
-                      onChange={(e) => setFormData({...formData, category: e.target.value})}
+                      value={formData.usedBy}
+                      onChange={(e) => setFormData({...formData, usedBy: e.target.value})}
+                      placeholder="Department, Employee, etc."
                       className="w-full h-10 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 text-sm text-slate-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-900 dark:text-white mb-2">Maintenance Type</label>
+                    <select
+                      value={formData.maintenanceTeam}
+                      onChange={(e) => setFormData({...formData, maintenanceTeam: e.target.value})}
+                      className="w-full h-10 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 text-sm text-slate-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+                    >
+                      <option value="">Select Team</option>
+                      {teams.map(team => (
+                        <option key={team.id} value={team.name}>{team.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-900 dark:text-white mb-2">Assigned Date?</label>
+                    <input
+                      type="date"
+                      value={formData.assignedDate}
+                      onChange={(e) => setFormData({...formData, assignedDate: e.target.value})}
+                      className="w-full h-10 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 text-sm text-slate-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-900 dark:text-white mb-2">Description</label>
+                    <textarea
+                      value={formData.description}
+                      onChange={(e) => setFormData({...formData, description: e.target.value})}
+                      rows="3"
+                      className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm text-slate-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none resize-none"
                     />
                   </div>
                   <div>
@@ -353,11 +452,60 @@ const Equipment = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-slate-900 dark:text-white mb-2">Employee</label>
+                    <label className="block text-sm font-medium text-slate-900 dark:text-white mb-2">Employee?</label>
                     <input
                       type="text"
                       value={formData.employee}
                       onChange={(e) => setFormData({...formData, employee: e.target.value})}
+                      className="w-full h-10 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 text-sm text-slate-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-900 dark:text-white mb-2">Team?</label>
+                    <select
+                      value={formData.maintenanceTeam}
+                      onChange={(e) => setFormData({...formData, maintenanceTeam: e.target.value})}
+                      className="w-full h-10 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 text-sm text-slate-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+                    >
+                      <option value="">Select Team</option>
+                      {teams.map(team => (
+                        <option key={team.id} value={team.name}>{team.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-900 dark:text-white mb-2">Status?</label>
+                    <select
+                      value={formData.status}
+                      onChange={(e) => setFormData({...formData, status: e.target.value})}
+                      className="w-full h-10 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 text-sm text-slate-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+                    >
+                      <option value="operational">Operational</option>
+                      <option value="maintenance">Maintenance</option>
+                      <option value="broken">Broken</option>
+                      <option value="scrapped">Scrapped</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-900 dark:text-white mb-2">Work Center?</label>
+                    <select
+                      value={formData.workCenter}
+                      onChange={(e) => setFormData({...formData, workCenter: e.target.value})}
+                      className="w-full h-10 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 text-sm text-slate-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+                    >
+                      <option value="">Select Work Center</option>
+                      {workCenters.map(wc => (
+                        <option key={wc.id} value={wc.name}>{wc.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-900 dark:text-white mb-2">Serial Number *</label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.serialNumber}
+                      onChange={(e) => setFormData({...formData, serialNumber: e.target.value})}
                       className="w-full h-10 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 text-sm text-slate-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none"
                     />
                   </div>
@@ -380,7 +528,7 @@ const Equipment = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-slate-900 dark:text-white mb-2">Warranty Info</label>
+                    <label className="block text-sm font-medium text-slate-900 dark:text-white mb-2">Warranty Information</label>
                     <input
                       type="text"
                       value={formData.warrantyInfo}
@@ -388,24 +536,21 @@ const Equipment = () => {
                       className="w-full h-10 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 text-sm text-slate-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none"
                     />
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-900 dark:text-white mb-2">Maintenance Team</label>
-                    <input
-                      type="text"
-                      value={formData.maintenanceTeam}
-                      onChange={(e) => setFormData({...formData, maintenanceTeam: e.target.value})}
-                      className="w-full h-10 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 text-sm text-slate-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-900 dark:text-white mb-2">Assigned Technician</label>
-                    <input
-                      type="text"
-                      value={formData.assignedTechnician}
-                      onChange={(e) => setFormData({...formData, assignedTechnician: e.target.value})}
-                      className="w-full h-10 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 text-sm text-slate-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none"
-                    />
-                  </div>
+                  {formData.maintenanceTeam && availableTechnicians.length > 0 && (
+                    <div>
+                      <label className="block text-sm font-medium text-slate-900 dark:text-white mb-2">Assigned Technician</label>
+                      <select
+                        value={formData.assignedTechnician}
+                        onChange={(e) => setFormData({...formData, assignedTechnician: e.target.value})}
+                        className="w-full h-10 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 text-sm text-slate-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+                      >
+                        <option value="">Unassigned</option>
+                        {availableTechnicians.map(tech => (
+                          <option key={tech.id || tech.name} value={tech.name}>{tech.name}</option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
                 </div>
                 <div className="flex justify-end gap-3 pt-4 border-t border-slate-200 dark:border-slate-700">
                   <button
@@ -413,6 +558,7 @@ const Equipment = () => {
                     onClick={() => {
                       setShowForm(false)
                       setSelectedEquipment(null)
+                      setActiveTab('new')
                     }}
                     className="px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
                   >

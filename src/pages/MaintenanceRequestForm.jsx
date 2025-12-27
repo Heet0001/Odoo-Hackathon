@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
 
 const MaintenanceRequestForm = () => {
   const { id } = useParams()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const { equipment, teams, addRequest, updateRequest, getEquipmentById, getTeamByName } = useApp()
   
   const [formData, setFormData] = useState({
     subject: '',
     type: 'Corrective',
     equipmentId: '',
-    scheduledDate: '',
+    scheduledDate: searchParams.get('scheduledDate') || '',
     duration: '',
     durationUnit: 'Hrs',
     priority: 'Medium',
@@ -71,6 +72,19 @@ const MaintenanceRequestForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     
+    // Convert duration to hours if needed
+    let hoursSpent = null
+    if (formData.duration) {
+      const durationValue = parseFloat(formData.duration)
+      if (formData.durationUnit === 'Hrs') {
+        hoursSpent = durationValue
+      } else if (formData.durationUnit === 'Min') {
+        hoursSpent = durationValue / 60
+      } else if (formData.durationUnit === 'Days') {
+        hoursSpent = durationValue * 8 // Assuming 8 hours per day
+      }
+    }
+    
     const requestData = {
       subject: formData.subject,
       equipmentId: formData.equipmentId,
@@ -78,6 +92,7 @@ const MaintenanceRequestForm = () => {
       type: formData.type,
       scheduledDate: formData.scheduledDate || new Date().toISOString().split('T')[0],
       duration: formData.duration ? parseFloat(formData.duration) : null,
+      hoursSpent: hoursSpent,
       priority: formData.priority,
       description: formData.description,
       assignedTeam: formData.assignedTeam,

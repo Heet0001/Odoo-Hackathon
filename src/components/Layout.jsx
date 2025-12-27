@@ -44,13 +44,35 @@ const Layout = ({ children }) => {
               <Link 
                 to="/equipment" 
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${
-                  isActive('/equipment')
+                  isActive('/equipment') && !isActive('/equipment-categories') && !isActive('/work-centers')
                     ? 'bg-primary text-white shadow-md shadow-primary/20'
                     : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
                 }`}
               >
                 <span className="material-symbols-outlined text-[24px]">build</span>
                 <p className="text-sm font-medium leading-normal">Equipment</p>
+              </Link>
+              <Link 
+                to="/equipment-categories" 
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ml-4 ${
+                  isActive('/equipment-categories')
+                    ? 'bg-primary text-white shadow-md shadow-primary/20'
+                    : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+                }`}
+              >
+                <span className="material-symbols-outlined text-[20px]">category</span>
+                <p className="text-sm font-medium leading-normal">Categories</p>
+              </Link>
+              <Link 
+                to="/work-centers" 
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ml-4 ${
+                  isActive('/work-centers')
+                    ? 'bg-primary text-white shadow-md shadow-primary/20'
+                    : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+                }`}
+              >
+                <span className="material-symbols-outlined text-[20px]">precision_manufacturing</span>
+                <p className="text-sm font-medium leading-normal">Work Centers</p>
               </Link>
               <Link 
                 to="/teams" 

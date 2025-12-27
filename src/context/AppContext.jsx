@@ -207,10 +207,27 @@ const initialRequests = [
   },
 ];
 
+// Equipment Categories
+const initialEquipmentCategories = [
+  { id: 'CAT-001', name: 'Asset', keywords: 'asset, property', company: 'My Company (Our Branch)' },
+  { id: 'CAT-002', name: 'Machine', keywords: 'machine, equipment', company: 'My Company (Our Branch)' },
+  { id: 'CAT-003', name: 'Database', keywords: 'database, server', company: 'My Company (Our Branch)' },
+  { id: 'CAT-004', name: 'Servers', keywords: 'server, hardware', company: 'My Company (Our Branch)' },
+];
+
+// Work Centers
+const initialWorkCenters = [
+  { id: 'WC-001', name: 'Work Center 1', cost: 100, time: 8, alternativeWorkCenters: [], costPerHour: 12.5, capacity: { unit: 10, efficiency: 100 }, costTarget: 1000 },
+  { id: 'WC-002', name: 'Assembly 1', cost: 150, time: 8, alternativeWorkCenters: [], costPerHour: 18.75, capacity: { unit: 15, efficiency: 95 }, costTarget: 1500 },
+  { id: 'WC-003', name: 'Ball 1', cost: 120, time: 8, alternativeWorkCenters: [], costPerHour: 15, capacity: { unit: 12, efficiency: 90 }, costTarget: 1200 },
+];
+
 export const AppProvider = ({ children }) => {
   const [equipment, setEquipment] = useState([]);
   const [teams, setTeams] = useState([]);
   const [requests, setRequests] = useState([]);
+  const [equipmentCategories, setEquipmentCategories] = useState([]);
+  const [workCenters, setWorkCenters] = useState([]);
   const [darkMode, setDarkMode] = useState(false);
 
   // Load data from localStorage on mount
@@ -218,6 +235,8 @@ export const AppProvider = ({ children }) => {
     const savedEquipment = localStorage.getItem('gearguard_equipment');
     const savedTeams = localStorage.getItem('gearguard_teams');
     const savedRequests = localStorage.getItem('gearguard_requests');
+    const savedCategories = localStorage.getItem('gearguard_categories');
+    const savedWorkCenters = localStorage.getItem('gearguard_workcenters');
     const savedDarkMode = localStorage.getItem('gearguard_darkMode');
 
     if (savedEquipment) {
@@ -239,6 +258,20 @@ export const AppProvider = ({ children }) => {
     } else {
       setRequests(initialRequests);
       localStorage.setItem('gearguard_requests', JSON.stringify(initialRequests));
+    }
+
+    if (savedCategories) {
+      setEquipmentCategories(JSON.parse(savedCategories));
+    } else {
+      setEquipmentCategories(initialEquipmentCategories);
+      localStorage.setItem('gearguard_categories', JSON.stringify(initialEquipmentCategories));
+    }
+
+    if (savedWorkCenters) {
+      setWorkCenters(JSON.parse(savedWorkCenters));
+    } else {
+      setWorkCenters(initialWorkCenters);
+      localStorage.setItem('gearguard_workcenters', JSON.stringify(initialWorkCenters));
     }
 
     if (savedDarkMode) {
@@ -264,6 +297,18 @@ export const AppProvider = ({ children }) => {
       localStorage.setItem('gearguard_requests', JSON.stringify(requests));
     }
   }, [requests]);
+
+  useEffect(() => {
+    if (equipmentCategories.length > 0) {
+      localStorage.setItem('gearguard_categories', JSON.stringify(equipmentCategories));
+    }
+  }, [equipmentCategories]);
+
+  useEffect(() => {
+    if (workCenters.length > 0) {
+      localStorage.setItem('gearguard_workcenters', JSON.stringify(workCenters));
+    }
+  }, [workCenters]);
 
   useEffect(() => {
     localStorage.setItem('gearguard_darkMode', darkMode.toString());
@@ -343,6 +388,19 @@ export const AppProvider = ({ children }) => {
           today.setHours(0, 0, 0, 0);
           updated.overdue = scheduled < today;
         }
+        
+        // Handle scrap logic - mark equipment as scrapped
+        if (updated.status === 'Scrap' && req.status !== 'Scrap') {
+          const equipment = getEquipmentById(req.equipmentId);
+          if (equipment) {
+            updateEquipment(req.equipmentId, {
+              status: 'scrapped',
+              scrappedDate: new Date().toISOString(),
+              scrappedReason: `Request ${req.ticketId} moved to Scrap stage`
+            });
+          }
+        }
+        
         return updated;
       }
       return req;
@@ -377,22 +435,61 @@ export const AppProvider = ({ children }) => {
     return teams.find(team => team.name === name);
   };
 
-  // Mark equipment as scrapped when request moves to Scrap
-  const handleRequestScrap = (requestId) => {
-    const request = requests.find(r => r.id === requestId);
-    if (request) {
-      updateEquipment(request.equipmentId, { 
-        status: 'scrapped',
-        scrappedDate: new Date().toISOString(),
-        scrappedReason: `Request ${request.ticketId} moved to Scrap stage`
-      });
-    }
+  // Equipment Categories functions
+  const addEquipmentCategory = (category) => {
+    const categoryWithId = {
+      ...category,
+      id: `CAT-${String(equipmentCategories.length + 1).padStart(3, '0')}`,
+    };
+    setEquipmentCategories([...equipmentCategories, categoryWithId]);
+    return categoryWithId;
+  };
+
+  const updateEquipmentCategory = (id, updates) => {
+    setEquipmentCategories(equipmentCategories.map(cat => cat.id === id ? { ...cat, ...updates } : cat));
+  };
+
+  const deleteEquipmentCategory = (id) => {
+    setEquipmentCategories(equipmentCategories.filter(cat => cat.id !== id));
+  };
+
+  // Work Center functions
+  const addWorkCenter = (workCenter) => {
+    const workCenterWithId = {
+      ...workCenter,
+      id: `WC-${String(workCenters.length + 1).padStart(3, '0')}`,
+    };
+    setWorkCenters([...workCenters, workCenterWithId]);
+    return workCenterWithId;
+  };
+
+  const updateWorkCenter = (id, updates) => {
+    setWorkCenters(workCenters.map(wc => wc.id === id ? { ...wc, ...updates } : wc));
+  };
+
+  const deleteWorkCenter = (id) => {
+    setWorkCenters(workCenters.filter(wc => wc.id !== id));
+  };
+
+  // Get team members for a specific team (for request assignment)
+  const getTeamMembers = (teamName) => {
+    const team = teams.find(t => t.name === teamName);
+    return team ? team.members : [];
+  };
+
+  // Check if technician can pick up request (must be in the assigned team)
+  const canTechnicianPickupRequest = (technicianName, teamName) => {
+    const team = teams.find(t => t.name === teamName);
+    if (!team) return false;
+    return team.members.some(m => m.name === technicianName);
   };
 
   const value = {
     equipment,
     teams,
     requests,
+    equipmentCategories,
+    workCenters,
     darkMode,
     setDarkMode,
     addEquipment,
@@ -408,7 +505,14 @@ export const AppProvider = ({ children }) => {
     getOpenRequestsCount,
     getEquipmentById,
     getTeamByName,
-    handleRequestScrap,
+    addEquipmentCategory,
+    updateEquipmentCategory,
+    deleteEquipmentCategory,
+    addWorkCenter,
+    updateWorkCenter,
+    deleteWorkCenter,
+    getTeamMembers,
+    canTechnicianPickupRequest,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

@@ -4,6 +4,8 @@ import { AppProvider } from './context/AppContext'
 import Layout from './components/Layout'
 import Dashboard from './pages/Dashboard'
 import Equipment from './pages/Equipment'
+import EquipmentCategories from './pages/EquipmentCategories'
+import WorkCenters from './pages/WorkCenters'
 import Teams from './pages/Teams'
 import KanbanBoard from './pages/KanbanBoard'
 import MaintenanceRequestForm from './pages/MaintenanceRequestForm'
@@ -19,6 +21,8 @@ function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/equipment" element={<Equipment />} />
             <Route path="/equipment/:id" element={<Equipment />} />
+            <Route path="/equipment-categories" element={<EquipmentCategories />} />
+            <Route path="/work-centers" element={<WorkCenters />} />
             <Route path="/teams" element={<Teams />} />
             <Route path="/kanban" element={<KanbanBoard />} />
             <Route path="/request/new" element={<MaintenanceRequestForm />} />

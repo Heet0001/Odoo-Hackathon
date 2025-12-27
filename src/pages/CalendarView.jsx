@@ -1,10 +1,11 @@
 import React, { useState, useMemo } from 'react'
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, addMonths, subMonths, startOfWeek, endOfWeek } from 'date-fns'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
 
 const CalendarView = () => {
   const { requests, equipment } = useApp()
+  const navigate = useNavigate()
   const [currentDate, setCurrentDate] = useState(new Date())
   const [selectedDate, setSelectedDate] = useState(null)
 
@@ -137,10 +138,6 @@ const CalendarView = () => {
                     key={idx}
                     onClick={() => {
                       handleDateClick(day)
-                      if (dayRequests.length === 0) {
-                        // Navigate to create new request for this date
-                        // You could pass date as query param
-                      }
                     }}
                     className={`
                       min-h-[80px] p-2 rounded-lg border cursor-pointer transition-all
@@ -219,7 +216,7 @@ const CalendarView = () => {
                     <span className="material-symbols-outlined text-4xl text-slate-400 mb-2">event_available</span>
                     <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">No scheduled maintenance</p>
                     <Link
-                      to="/request/new"
+                      to={`/request/new?scheduledDate=${format(selectedDate, 'yyyy-MM-dd')}`}
                       className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
                     >
                       <span className="material-symbols-outlined text-[18px]">add</span>

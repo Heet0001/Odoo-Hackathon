@@ -129,7 +129,7 @@ const KanbanColumn = ({ status, title, requests, equipment, teams, onDrop, onAss
 }
 
 const KanbanBoard = () => {
-  const { requests, equipment, teams, updateRequest, handleRequestScrap } = useApp()
+  const { requests, equipment, teams, updateRequest } = useApp()
   const [searchParams] = useSearchParams()
   const equipmentFilter = searchParams.get('equipment')
   const [filterTechnician, setFilterTechnician] = useState('All')
@@ -176,18 +176,15 @@ const KanbanBoard = () => {
   }, [filteredRequests])
 
   const handleDrop = (requestId, newStatus) => {
+    // updateRequest will automatically handle scrap logic
     updateRequest(requestId, { status: newStatus })
-    
-    // If moving to Scrap, handle equipment status
-    if (newStatus === 'Scrap') {
-      handleRequestScrap(requestId)
-    }
   }
 
   const handleAssign = (requestId, technicianName) => {
+    const request = requests.find(r => r.id === requestId)
     updateRequest(requestId, { 
       assignedTechnician: technicianName,
-      status: requestId.status === 'New' ? 'In Progress' : requestId.status
+      status: request?.status === 'New' ? 'In Progress' : request?.status
     })
   }
 
