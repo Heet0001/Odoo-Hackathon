@@ -9,6 +9,8 @@ const Equipment = () => {
   
   const [searchTerm, setSearchTerm] = useState('')
   const [groupBy, setGroupBy] = useState('none') // 'none', 'department', 'employee', 'team'
+  const [statusFilter, setStatusFilter] = useState('all')
+  const [categoryFilter, setCategoryFilter] = useState('all')
   const [showForm, setShowForm] = useState(false)
   const [selectedEquipment, setSelectedEquipment] = useState(null)
   const [activeTab, setActiveTab] = useState('new') // 'new' or 'component'
@@ -35,13 +37,18 @@ const Equipment = () => {
   const filteredEquipment = useMemo(() => {
     let filtered = equipment.filter(eq => {
       const searchLower = searchTerm.toLowerCase()
-      return (
+      const matchesSearch = (
         eq.name.toLowerCase().includes(searchLower) ||
         eq.serialNumber.toLowerCase().includes(searchLower) ||
         eq.department?.toLowerCase().includes(searchLower) ||
         eq.employee?.toLowerCase().includes(searchLower) ||
         eq.location?.toLowerCase().includes(searchLower)
       )
+      
+      const matchesStatus = statusFilter === 'all' || eq.status === statusFilter
+      const matchesCategory = categoryFilter === 'all' || eq.category === categoryFilter
+      
+      return matchesSearch && matchesStatus && matchesCategory
     })
 
     if (groupBy === 'department') {
@@ -71,7 +78,7 @@ const Equipment = () => {
     }
 
     return filtered
-  }, [equipment, searchTerm, groupBy])
+  }, [equipment, searchTerm, groupBy, statusFilter, categoryFilter])
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -284,7 +291,28 @@ const Equipment = () => {
                 />
               </div>
             </div>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="h-10 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 text-sm text-slate-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+              >
+                <option value="all">All Status</option>
+                <option value="operational">Operational</option>
+                <option value="maintenance">Maintenance</option>
+                <option value="broken">Broken</option>
+                <option value="scrapped">Scrapped</option>
+              </select>
+              <select
+                value={categoryFilter}
+                onChange={(e) => setCategoryFilter(e.target.value)}
+                className="h-10 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 text-sm text-slate-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+              >
+                <option value="all">All Categories</option>
+                {equipmentCategories.map(cat => (
+                  <option key={cat.id} value={cat.name}>{cat.name}</option>
+                ))}
+              </select>
               <select
                 value={groupBy}
                 onChange={(e) => setGroupBy(e.target.value)}

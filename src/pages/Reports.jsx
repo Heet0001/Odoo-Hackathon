@@ -5,6 +5,71 @@ import { useApp } from '../context/AppContext'
 const Reports = () => {
   const { requests, equipment, teams } = useApp()
 
+  // CSV Export Functions
+  const exportToCSV = (data, filename) => {
+    const headers = Object.keys(data[0])
+    const csvContent = [
+      headers.join(','),
+      ...data.map(row => 
+        headers.map(header => {
+          const value = row[header]
+          // Escape commas and quotes
+          if (typeof value === 'string' && (value.includes(',') || value.includes('"'))) {
+            return `"${value.replace(/"/g, '""')}"`
+          }
+          return value
+        }).join(',')
+      )
+    ].join('\n')
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+    const link = document.createElement('a')
+    if (link.download !== undefined) {
+      const url = URL.createObjectURL(blob)
+      link.setAttribute('href', url)
+      link.setAttribute('download', filename)
+      link.style.visibility = 'hidden'
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    }
+  }
+
+  const exportEquipmentData = () => {
+    const data = equipment.map(eq => ({
+      'Equipment ID': eq.id,
+      'Name': eq.name,
+      'Serial Number': eq.serialNumber,
+      'Category': eq.category || 'N/A',
+      'Department': eq.department || 'N/A',
+      'Employee': eq.employee || 'N/A',
+      'Location': eq.location || 'N/A',
+      'Status': eq.status,
+      'Maintenance Team': eq.maintenanceTeam || 'N/A',
+      'Purchase Date': eq.purchaseDate || 'N/A',
+      'Warranty Info': eq.warrantyInfo || 'N/A'
+    }))
+    exportToCSV(data, `equipment-report-${new Date().toISOString().split('T')[0]}.csv`)
+  }
+
+  const exportRequestsData = () => {
+    const data = requests.map(req => ({
+      'Ticket ID': req.ticketId,
+      'Subject': req.subject,
+      'Equipment': req.equipmentName,
+      'Type': req.type,
+      'Priority': req.priority,
+      'Status': req.status,
+      'Assigned Team': req.assignedTeam || 'N/A',
+      'Assigned Technician': req.assignedTechnician || 'N/A',
+      'Scheduled Date': req.scheduledDate,
+      'Duration': req.duration || 'N/A',
+      'Hours Spent': req.hoursSpent || 'N/A',
+      'Created At': req.createdAt
+    }))
+    exportToCSV(data, `maintenance-requests-${new Date().toISOString().split('T')[0]}.csv`)
+  }
+
   // Requests per Team
   const requestsPerTeam = useMemo(() => {
     const teamCounts = {}
@@ -73,6 +138,22 @@ const Reports = () => {
           <div className="flex flex-col gap-1">
             <h2 className="text-slate-900 dark:text-white text-3xl font-bold leading-tight tracking-tight">Reports & Analytics</h2>
             <p className="text-slate-500 dark:text-slate-400 text-base font-normal">Comprehensive insights into maintenance operations</p>
+          </div>
+          <div className="flex gap-2">
+            <button
+              onClick={exportEquipmentData}
+              className="flex items-center gap-2 justify-center rounded-lg h-10 px-4 bg-green-600 hover:bg-green-700 text-white transition-all text-sm font-medium"
+            >
+              <span className="material-symbols-outlined text-[20px]">download</span>
+              <span>Export Equipment</span>
+            </button>
+            <button
+              onClick={exportRequestsData}
+              className="flex items-center gap-2 justify-center rounded-lg h-10 px-4 bg-blue-600 hover:bg-blue-700 text-white transition-all text-sm font-medium"
+            >
+              <span className="material-symbols-outlined text-[20px]">download</span>
+              <span>Export Requests</span>
+            </button>
           </div>
         </div>
 

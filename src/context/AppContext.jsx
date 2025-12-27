@@ -229,6 +229,8 @@ export const AppProvider = ({ children }) => {
   const [equipmentCategories, setEquipmentCategories] = useState([]);
   const [workCenters, setWorkCenters] = useState([]);
   const [darkMode, setDarkMode] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   // Load data from localStorage on mount
   useEffect(() => {
@@ -238,6 +240,7 @@ export const AppProvider = ({ children }) => {
     const savedCategories = localStorage.getItem('gearguard_categories');
     const savedWorkCenters = localStorage.getItem('gearguard_workcenters');
     const savedDarkMode = localStorage.getItem('gearguard_darkMode');
+    const savedUser = localStorage.getItem('gearguard_currentUser');
 
     if (savedEquipment) {
       setEquipment(JSON.parse(savedEquipment));
@@ -276,6 +279,29 @@ export const AppProvider = ({ children }) => {
 
     if (savedDarkMode) {
       setDarkMode(savedDarkMode === 'true');
+    }
+
+    // Initialize default users if none exist
+    const savedUsers = localStorage.getItem('gearguard_users');
+    if (!savedUsers) {
+      const defaultUsers = [
+        {
+          id: 'USER-001',
+          name: 'Admin User',
+          email: 'admin@gearguard.com',
+          password: 'admin123',
+          role: 'Manager',
+          team: '',
+          createdAt: new Date().toISOString(),
+          avatar: null,
+        },
+      ];
+      localStorage.setItem('gearguard_users', JSON.stringify(defaultUsers));
+    }
+
+    if (savedUser) {
+      setCurrentUser(JSON.parse(savedUser));
+      setIsAuthenticated(true);
     }
   }, []);
 
@@ -378,33 +404,40 @@ export const AppProvider = ({ children }) => {
   };
 
   const updateRequest = (id, updates) => {
-    setRequests(requests.map(req => {
-      if (req.id === id) {
-        const updated = { ...req, ...updates };
-        // Check if overdue
-        if (updated.scheduledDate && updated.status !== 'Repaired' && updated.status !== 'Scrap') {
-          const scheduled = new Date(updated.scheduledDate);
-          const today = new Date();
-          today.setHours(0, 0, 0, 0);
-          updated.overdue = scheduled < today;
-        }
-        
-        // Handle scrap logic - mark equipment as scrapped
-        if (updated.status === 'Scrap' && req.status !== 'Scrap') {
-          const equipment = getEquipmentById(req.equipmentId);
-          if (equipment) {
-            updateEquipment(req.equipmentId, {
-              status: 'scrapped',
-              scrappedDate: new Date().toISOString(),
-              scrappedReason: `Request ${req.ticketId} moved to Scrap stage`
-            });
+    setRequests(prevRequests => {
+      const updatedRequests = prevRequests.map(req => {
+        if (req.id === id) {
+          const updated = { ...req, ...updates };
+          // Check if overdue
+          if (updated.scheduledDate && updated.status !== 'Repaired' && updated.status !== 'Scrap') {
+            const scheduled = new Date(updated.scheduledDate);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            updated.overdue = scheduled < today;
           }
+          
+          // Handle scrap logic - mark equipment as scrapped
+          if (updated.status === 'Scrap' && req.status !== 'Scrap') {
+            const equipment = getEquipmentById(req.equipmentId);
+            if (equipment) {
+              updateEquipment(req.equipmentId, {
+                status: 'scrapped',
+                scrappedDate: new Date().toISOString(),
+                scrappedReason: `Request ${req.ticketId} moved to Scrap stage`
+              });
+            }
+          }
+          
+          return updated;
         }
-        
-        return updated;
-      }
-      return req;
-    }));
+        return req;
+      });
+      
+      // Update equipment status based on request changes
+      syncEquipmentStatusFromRequests(updatedRequests);
+      
+      return updatedRequests;
+    });
   };
 
   const deleteRequest = (id) => {
@@ -484,6 +517,112 @@ export const AppProvider = ({ children }) => {
     return team.members.some(m => m.name === technicianName);
   };
 
+  // Sync equipment status based on active requests
+  const syncEquipmentStatusFromRequests = (currentRequests) => {
+    setEquipment(prevEquipment => {
+      return prevEquipment.map(eq => {
+        // Skip if equipment is already scrapped
+        if (eq.status === 'scrapped') return eq;
+        
+        const equipmentRequests = currentRequests.filter(req => req.equipmentId === eq.id);
+        const activeRequests = equipmentRequests.filter(req => req.status !== 'Repaired' && req.status !== 'Scrap');
+        
+        // Determine status based on active requests
+        const hasInProgress = activeRequests.some(req => req.status === 'In Progress');
+        const hasNew = activeRequests.some(req => req.status === 'New');
+        const hasBroken = activeRequests.some(req => req.priority === 'High' && req.type === 'Corrective');
+        
+        let newStatus = 'operational';
+        
+        if (hasInProgress) {
+          newStatus = 'maintenance';
+        } else if (hasBroken) {
+          newStatus = 'broken';
+        } else if (hasNew) {
+          // Keep current status or set to maintenance if there are pending requests
+          newStatus = eq.status === 'broken' ? 'broken' : 'maintenance';
+        } else if (activeRequests.length === 0) {
+          // No active requests - set to operational
+          newStatus = 'operational';
+        }
+        
+        if (eq.status !== newStatus) {
+          return { ...eq, status: newStatus };
+        }
+        
+        return eq;
+      });
+    });
+  };
+
+  // Authentication functions
+  const login = async (email, password) => {
+    // In a real app, this would make an API call
+    // For now, simulate with localStorage
+    const users = JSON.parse(localStorage.getItem('gearguard_users') || '[]');
+    const user = users.find(u => u.email === email && u.password === password);
+    
+    if (user) {
+      const { password: _, ...userWithoutPassword } = user;
+      setCurrentUser(userWithoutPassword);
+      setIsAuthenticated(true);
+      localStorage.setItem('gearguard_currentUser', JSON.stringify(userWithoutPassword));
+      return true;
+    }
+    
+    return false;
+  };
+
+  const signup = async (userData) => {
+    // In a real app, this would make an API call
+    const users = JSON.parse(localStorage.getItem('gearguard_users') || '[]');
+    
+    // Check if email already exists
+    if (users.some(u => u.email === userData.email)) {
+      return false;
+    }
+    
+    // Create new user
+    const newUser = {
+      id: `USER-${String(users.length + 1).padStart(3, '0')}`,
+      ...userData,
+      createdAt: new Date().toISOString(),
+      avatar: null,
+    };
+    
+    users.push(newUser);
+    localStorage.setItem('gearguard_users', JSON.stringify(users));
+    
+    // Auto-login after signup
+    const { password: _, ...userWithoutPassword } = newUser;
+    setCurrentUser(userWithoutPassword);
+    setIsAuthenticated(true);
+    localStorage.setItem('gearguard_currentUser', JSON.stringify(userWithoutPassword));
+    
+    return true;
+  };
+
+  const logout = () => {
+    setCurrentUser(null);
+    setIsAuthenticated(false);
+    localStorage.removeItem('gearguard_currentUser');
+  };
+
+  const updateProfile = (updates) => {
+    if (!currentUser) return false;
+    
+    const updatedUser = { ...currentUser, ...updates };
+    setCurrentUser(updatedUser);
+    localStorage.setItem('gearguard_currentUser', JSON.stringify(updatedUser));
+    
+    // Update in users list
+    const users = JSON.parse(localStorage.getItem('gearguard_users') || '[]');
+    const updatedUsers = users.map(u => u.id === currentUser.id ? { ...u, ...updates } : u);
+    localStorage.setItem('gearguard_users', JSON.stringify(updatedUsers));
+    
+    return true;
+  };
+
   const value = {
     equipment,
     teams,
@@ -492,6 +631,8 @@ export const AppProvider = ({ children }) => {
     workCenters,
     darkMode,
     setDarkMode,
+    currentUser,
+    isAuthenticated,
     addEquipment,
     updateEquipment,
     deleteEquipment,
@@ -513,6 +654,10 @@ export const AppProvider = ({ children }) => {
     deleteWorkCenter,
     getTeamMembers,
     canTechnicianPickupRequest,
+    login,
+    signup,
+    logout,
+    updateProfile,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
