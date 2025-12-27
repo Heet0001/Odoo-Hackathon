@@ -51,7 +51,9 @@ const Profile = () => {
                 {currentUser?.avatar ? (
                   <img src={currentUser.avatar} alt="Profile" className="size-full rounded-full object-cover" />
                 ) : (
-                  <span className="material-symbols-outlined text-[64px]">person</span>
+                  <span className="text-[48px] font-bold">
+                    {currentUser?.name ? currentUser.name.charAt(0).toUpperCase() : 'U'}
+                  </span>
                 )}
               </div>
               <button className="mb-4 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors text-sm font-medium flex items-center gap-2">

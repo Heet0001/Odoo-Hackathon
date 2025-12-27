@@ -22,14 +22,28 @@ const Dashboard = () => {
     return false
   }).length
 
-  // Calculate asset status
+  // Calculate asset status (include scrapped in broken count)
   const operational = equipment.filter(e => e.status === 'operational').length
   const inMaintenance = equipment.filter(e => e.status === 'maintenance').length
-  const broken = equipment.filter(e => e.status === 'broken').length
+  const broken = equipment.filter(e => e.status === 'broken' || e.status === 'scrapped').length
   const total = equipment.length
-  const operationalPercent = total > 0 ? Math.round((operational / total) * 100) : 0
-  const maintenancePercent = total > 0 ? Math.round((inMaintenance / total) * 100) : 0
-  const brokenPercent = total > 0 ? Math.round((broken / total) * 100) : 0
+  
+  // Calculate percentages and normalize to ensure they sum to 100%
+  let operationalPercent = total > 0 ? (operational / total) * 100 : 0
+  let maintenancePercent = total > 0 ? (inMaintenance / total) * 100 : 0
+  let brokenPercent = total > 0 ? (broken / total) * 100 : 0
+  
+  // Normalize percentages to sum to exactly 100%
+  const sum = operationalPercent + maintenancePercent + brokenPercent
+  if (sum > 0 && total > 0) {
+    operationalPercent = Math.round((operationalPercent / sum) * 100)
+    maintenancePercent = Math.round((maintenancePercent / sum) * 100)
+    brokenPercent = 100 - operationalPercent - maintenancePercent // Ensure exact 100%
+  } else {
+    operationalPercent = 0
+    maintenancePercent = 0
+    brokenPercent = 0
+  }
 
   // Priority requests
   const priorityRequests = requests
@@ -226,7 +240,7 @@ const Dashboard = () => {
                   <div className="flex items-center gap-2">
                     <span className="size-3 rounded-full bg-red-500"></span>
                     <div className="flex flex-col">
-                      <span className="text-xs text-slate-500">Broken</span>
+                      <span className="text-xs text-slate-500">Scrapped</span>
                       <span className="text-sm font-bold text-slate-900 dark:text-white">{brokenPercent}%</span>
                     </div>
                   </div>

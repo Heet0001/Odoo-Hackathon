@@ -228,9 +228,11 @@ export const AppProvider = ({ children }) => {
   const [requests, setRequests] = useState([]);
   const [equipmentCategories, setEquipmentCategories] = useState([]);
   const [workCenters, setWorkCenters] = useState([]);
+  // Initialize authentication state from localStorage immediately (before useEffect)
+  const savedUser = typeof window !== 'undefined' ? localStorage.getItem('gearguard_currentUser') : null;
   const [darkMode, setDarkMode] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [currentUser, setCurrentUser] = useState(savedUser ? JSON.parse(savedUser) : null);
+  const [isAuthenticated, setIsAuthenticated] = useState(!!savedUser);
 
   // Load data from localStorage on mount
   useEffect(() => {
@@ -240,7 +242,7 @@ export const AppProvider = ({ children }) => {
     const savedCategories = localStorage.getItem('gearguard_categories');
     const savedWorkCenters = localStorage.getItem('gearguard_workcenters');
     const savedDarkMode = localStorage.getItem('gearguard_darkMode');
-    const savedUser = localStorage.getItem('gearguard_currentUser');
+    const savedUserFromStorage = localStorage.getItem('gearguard_currentUser');
 
     if (savedEquipment) {
       setEquipment(JSON.parse(savedEquipment));
@@ -299,9 +301,13 @@ export const AppProvider = ({ children }) => {
       localStorage.setItem('gearguard_users', JSON.stringify(defaultUsers));
     }
 
-    if (savedUser) {
-      setCurrentUser(JSON.parse(savedUser));
+    // Ensure authentication state is synced with localStorage
+    if (savedUserFromStorage) {
+      setCurrentUser(JSON.parse(savedUserFromStorage));
       setIsAuthenticated(true);
+    } else {
+      setCurrentUser(null);
+      setIsAuthenticated(false);
     }
   }, []);
 

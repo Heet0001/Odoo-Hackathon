@@ -35,7 +35,11 @@ const Layout = ({ children }) => {
             {/* Profile / Logo Area */}
             <Link to="/profile" className="flex gap-3 items-center px-2 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
               <div className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border border-slate-200 dark:border-slate-700 flex items-center justify-center bg-primary text-white" style={{backgroundImage: currentUser?.avatar ? `url(${currentUser.avatar})` : 'none'}}>
-                {!currentUser?.avatar && <span className="material-symbols-outlined text-[24px]">person</span>}
+                {!currentUser?.avatar && (
+                  <span className="text-[18px] font-bold">
+                    {currentUser?.name ? currentUser.name.charAt(0).toUpperCase() : 'U'}
+                  </span>
+                )}
               </div>
               <div className="flex flex-col">
                 <h1 className="text-slate-900 dark:text-white text-base font-bold leading-normal">{currentUser?.name || 'GearGuard'}</h1>
@@ -262,7 +266,13 @@ const Layout = ({ children }) => {
                 </div>
               )}
             </div>
-            <div className="size-8 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden" style={{backgroundImage: 'url(\'https://lh3.googleusercontent.com/aida-public/AB6AXuCfE65f3-2vtosqqocOHZdyIRbmJAESASXATHeOZ0cYtaOarsKUWRaWSkFe6cdKeXw7nqgZMW4wDD2bsQ7j1HI5OqW6q7W4xY4q3NVlF3Yl9JgIE876o56tBCXMP8XDqOisg9jKOkajt6hyWYw5AOybRbTmRQTfhgmpWRwG4gYKClQ8UwiILxtQpdvPizvXMVqkbfyTh9L2DfJKR3Iax1Glcbg4dDfEYsSCy8Av4AddqX1ngeWrMqqIJOHuYwQUcqXnGSnVnXMTd2Q\')'}}></div>
+            <Link to="/profile" className="size-8 rounded-full bg-primary overflow-hidden cursor-pointer hover:ring-2 hover:ring-primary transition-all flex items-center justify-center text-white font-bold text-sm" style={{backgroundImage: currentUser?.avatar ? `url(${currentUser.avatar})` : 'none'}}>
+              {!currentUser?.avatar && (
+                <span>
+                  {currentUser?.name ? currentUser.name.charAt(0).toUpperCase() : 'U'}
+                </span>
+              )}
+            </Link>
           </div>
         </header>
         {/* Scrollable Content */}
