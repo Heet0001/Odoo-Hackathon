@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Maintenance Teams Management</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a2332",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        /* Custom scrollbar for cleaner look */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex overflow-hidden">
+<!-- Side Navigation -->
+<aside class="w-64 bg-surface-light dark:bg-surface-dark border-r border-slate-200 dark:border-slate-800 flex-col hidden md:flex h-screen sticky top-0 z-20">
+<div class="h-16 flex items-center px-6 border-b border-slate-200 dark:border-slate-800">
+<div class="flex flex-col">
+<h1 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-tight">MaintManager</h1>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium">Admin Console</p>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto py-6 px-4 flex flex-col gap-6">
+<div class="flex flex-col gap-1">
+<p class="px-3 text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">Main</p>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">warehouse</span>
+<span class="text-sm font-medium">Assets</span>
+</a>
+<!-- Active State -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary dark:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="text-sm font-bold">Teams</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">task</span>
+<span class="text-sm font-medium">Requests</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">calendar_month</span>
+<span class="text-sm font-medium">Schedule</span>
+</a>
+</div>
+<div class="flex flex-col gap-1">
+<p class="px-3 text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">System</p>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">help</span>
+<span class="text-sm font-medium">Support</span>
+</a>
+</div>
+</div>
+<div class="p-4 border-t border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-3 px-2">
+<div class="relative">
+<div class="size-10 rounded-full bg-cover bg-center ring-2 ring-white dark:ring-slate-700" data-alt="User profile picture of admin" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBY9D7C7eESR0muOB39nvDW7L5W6YjwelWiDLuV9WWO9dS60HP24iqpNole3SeAaFRL5aQU-E6foMZDxIpSPYRvKt6UHkl0CJKorrW9BhusYLb39xzRzcoYfmU89Dlcfq0ybVtrmoc0jc9IDpwdsiwHCvMJ1nwZ9zp8PAvqL30dh4ko9S8LhXNexp3LJLx5rxWORNQfbb9XOtD4N7PIgmh4GTu1myQlOXZ97cPvbV33NNXrCyBH1WTGAbxFEKSNZhATPMchoz7BI4Y");'></div>
+<div class="absolute bottom-0 right-0 size-3 bg-green-500 rounded-full border-2 border-white dark:border-slate-800"></div>
+</div>
+<div class="flex flex-col">
+<p class="text-sm font-semibold text-slate-900 dark:text-white">Alex Morgan</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Admin</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col h-screen overflow-hidden relative">
+<!-- Top Header -->
+<header class="h-16 bg-surface-light dark:bg-surface-dark border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-6 sticky top-0 z-10 shrink-0">
+<div class="flex items-center gap-4">
+<button class="md:hidden p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<!-- Breadcrumbs -->
+<nav class="hidden sm:flex items-center text-sm font-medium text-slate-500 dark:text-slate-400">
+<a class="hover:text-primary transition-colors" href="#">Home</a>
+<span class="mx-2 text-slate-300 dark:text-slate-600">/</span>
+<span class="text-slate-900 dark:text-white font-semibold">Teams</span>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
+<input class="pl-10 pr-4 py-2 w-64 bg-slate-100 dark:bg-slate-800 border-none rounded-lg text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-primary placeholder-slate-400 dark:placeholder-slate-500" placeholder="Search teams or technicians..." type="text"/>
+</div>
+<div class="h-6 w-px bg-slate-200 dark:bg-slate-700 hidden sm:block"></div>
+<button class="p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-red-500 rounded-full ring-2 ring-white dark:ring-slate-800"></span>
+</button>
+</div>
+</header>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto bg-background-light dark:bg-background-dark p-6 lg:p-10">
+<div class="max-w-7xl mx-auto flex flex-col gap-8">
+<!-- Page Heading & Actions -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<div class="flex flex-col gap-1">
+<h1 class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Team Management</h1>
+<p class="text-slate-500 dark:text-slate-400">Organize maintenance crews and assign technicians.</p>
+</div>
+<button class="flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white px-5 py-2.5 rounded-lg font-medium transition-all shadow-sm shadow-primary/20">
+<span class="material-symbols-outlined text-xl">add</span>
+<span>New Team</span>
+</button>
+</div>
+<!-- Stats Overview -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="bg-surface-light dark:bg-surface-dark p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-between">
+<div class="flex flex-col gap-1">
+<span class="text-sm font-medium text-slate-500 dark:text-slate-400">Total Teams</span>
+<span class="text-3xl font-bold text-slate-900 dark:text-white">8</span>
+</div>
+<div class="size-12 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">groups</span>
+</div>
+</div>
+<div class="bg-surface-light dark:bg-surface-dark p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-between">
+<div class="flex flex-col gap-1">
+<span class="text-sm font-medium text-slate-500 dark:text-slate-400">Total Technicians</span>
+<span class="text-3xl font-bold text-slate-900 dark:text-white">42</span>
+</div>
+<div class="size-12 rounded-full bg-green-50 dark:bg-green-900/20 flex items-center justify-center text-green-600 dark:text-green-400">
+<span class="material-symbols-outlined">engineering</span>
+</div>
+</div>
+<div class="bg-surface-light dark:bg-surface-dark p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-between">
+<div class="flex flex-col gap-1">
+<span class="text-sm font-medium text-slate-500 dark:text-slate-400">Technicians On-Duty</span>
+<span class="text-3xl font-bold text-slate-900 dark:text-white">28</span>
+</div>
+<div class="size-12 rounded-full bg-orange-50 dark:bg-orange-900/20 flex items-center justify-center text-orange-600 dark:text-orange-400">
+<span class="material-symbols-outlined">chef_hat</span>
+</div>
+</div>
+</div>
+<!-- Active Teams Grid -->
+<div class="flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<h2 class="text-lg font-bold text-slate-900 dark:text-white">Active Teams</h2>
+<div class="flex items-center gap-2">
+<button class="p-2 text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">view_module</span>
+</button>
+<button class="p-2 text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">view_list</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+<!-- Team Card 1 -->
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-slate-700 p-5 shadow-sm hover:shadow-md transition-shadow group">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">build</span>
+</div>
+<div>
+<h3 class="font-bold text-slate-900 dark:text-white text-base">Mechanics Alpha</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400">Heavy Machinery</p>
+</div>
+</div>
+<button class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between text-sm">
+<span class="text-slate-500 dark:text-slate-400">Team Lead</span>
+<span class="font-medium text-slate-900 dark:text-white">Sarah Jenkins</span>
+</div>
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="text-xs font-medium text-slate-500 dark:text-slate-400">Members (8)</span>
+<span class="text-xs text-green-600 dark:text-green-400 font-medium bg-green-50 dark:bg-green-900/20 px-2 py-0.5 rounded-full">5 Available</span>
+</div>
+<div class="flex -space-x-2 overflow-hidden py-1">
+<img alt="" class="inline-block size-8 rounded-full ring-2 ring-white dark:ring-slate-800 object-cover" data-alt="Portrait of Sarah Jenkins" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcHlFVSZe7VtDr5j4qK95BbIYp2nObgo7FUk7L_6JtUw-dPdZiTszzzFyfhJvUfP1pmtD5y9oPnTSFnMq23GS1KWlPXwhWZkdEo72GOGDPI5-cezngkzdeVO4qVlZLUyQ5U6D6Eip46hvB5eGKxLhLmNn2vZ35H7FoVqUlKxFjT5UQDDVEpx7rfXosfXuec7gohzpBdFclQETGTc0RE6ic3j6-Sz__Y6RDcqx6uQ5u6Ir5H7-98oOviNqqrw8xo2bZo6zCMpkM2p8"/>
+<img alt="" class="inline-block size-8 rounded-full ring-2 ring-white dark:ring-slate-800 object-cover" data-alt="Portrait of male technician" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJ5c4ezVJFu2XaYL5KMkKF8cx8c360SwJJtza0ZN_EZLr2CD9g7x7Nin1CX3_4af310BIvfdpQlL4XrJllGK-vNB_-VAzGYOxEg4DnQ_BD9-GDa8XfP6Muk-4zziC-SgU1wx-PyjSsdLyL5JwQA-v8xnIi0I9fbTzcWwmqW2VbQBbQXBXbmo1ong5sB2zR3UVQIvEeRbWTv--O_xcM-N6ajCTfKYTTwWNP2EJEyz1KuEbVEMPHeQwd3wpblQoEmzqOj_-dTiRiraQ"/>
+<img alt="" class="inline-block size-8 rounded-full ring-2 ring-white dark:ring-slate-800 object-cover" data-alt="Portrait of male technician" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpHTfXt2McXJl2270xxi-J7vICma3ZcqzeYgLngikOE45WqTpBgy1pPlRxQ1dUUoZoEJ-T1Iw9voQUk1XiPHNMyVxkeXQD67l0hQrU84NuiSN3f_xYFF1mY8y1loubJSQmsJXXnR-AR2ZQpK2YTSjAqh2s_yvIEDIHByS28cBAeqSEbBBrBF0rsnKx_2HAqCpi8EJtMtkrbXaE0vYmvh0sfripG58cKxecf6nrE3FCtjQ7e3N4bOl1BHKhpQpX1LQUaNbXechowX4"/>
+<img alt="" class="inline-block size-8 rounded-full ring-2 ring-white dark:ring-slate-800 object-cover" data-alt="Portrait of female technician" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5SSYyj9y8xAUAf3AbH9Ymnts5Ruyfdn-QT6L6GOzsZDNan0PeIbqiYqExI4FgNJOCKnjy8JytXU4YRhFvMRVhyn3q9Sd7ymhTcHCoAdsG6akJ2RWV6IM189z6K5aTIGJ6T10jgasbtqD5g7A2Efx5q6CWrZPB8npUXq0m-GOox2yAaV_uxZ4jtsNN9fviYZSzBbTb7AmJhalaVcVdzt9GKZYZEiOJ6ohINgF8qW7DYc1rF54fCYSr__ihYecgPl4Ze6lKe8_IBo4"/>
+<div class="flex items-center justify-center size-8 rounded-full ring-2 ring-white dark:ring-slate-800 bg-slate-100 dark:bg-slate-700 text-xs font-medium text-slate-500 dark:text-slate-300">
+                                            +4
+                                        </div>
+</div>
+</div>
+<div class="pt-2 border-t border-slate-100 dark:border-slate-800 flex gap-2">
+<button class="flex-1 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors">View Schedule</button>
+<button class="flex-1 py-2 text-sm font-medium text-white bg-primary/90 hover:bg-primary rounded-lg transition-colors shadow-sm shadow-primary/20">Manage</button>
+</div>
+</div>
+</div>
+<!-- Team Card 2 -->
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-slate-700 p-5 shadow-sm hover:shadow-md transition-shadow group">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-600 dark:text-orange-500">
+<span class="material-symbols-outlined">bolt</span>
+</div>
+<div>
+<h3 class="font-bold text-slate-900 dark:text-white text-base">Electrical Response</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400">High Voltage</p>
+</div>
+</div>
+<button class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between text-sm">
+<span class="text-slate-500 dark:text-slate-400">Team Lead</span>
+<span class="font-medium text-slate-900 dark:text-white">Mike Ross</span>
+</div>
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="text-xs font-medium text-slate-500 dark:text-slate-400">Members (6)</span>
+<span class="text-xs text-orange-600 dark:text-orange-400 font-medium bg-orange-50 dark:bg-orange-900/20 px-2 py-0.5 rounded-full">Busy</span>
+</div>
+<div class="flex -space-x-2 overflow-hidden py-1">
+<img alt="" class="inline-block size-8 rounded-full ring-2 ring-white dark:ring-slate-800 object-cover" data-alt="Portrait of Mike Ross" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKHb6NjVTA9OXEcfesNjTJN_EGG9tC9qBwDRZcWrO2vUmZC5EzEuU9cacqIE4eSc-L7cv1dHz8I-9bbyvlQIhQhv4ERo6Z8neC8oSgkyxbbiX5-SEa8vquzKN148m9crKIFUr1PhcLf_qkSHn_lcfeCP87jgg5sSqUD86c1C7ZREL7HMUODwRVlvQQkaepgxlG2RZmiMozq2pOexmGYx7Qp1fho-PO_j6UD4sQFWNlkig1Wv54q-1af-lVx33PIyTiZ6tqzF-L_vs"/>
+<img alt="" class="inline-block size-8 rounded-full ring-2 ring-white dark:ring-slate-800 object-cover" data-alt="Portrait of female technician" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAo6UoZnRs6vYkspidoL2NdHU5a4WN1iLrkQJ0OgD_YzRe48LqZewrV_Xu-fEiaTEyR4rdPhZhpmQb3nlUt35EgEB_Q_N5YHXMjnGzVXwFvI48DbuZaXMn6j4EeqSBse9xfPb9lLIiOH3NnJ1pn9FEO8x9112yq-cMIsFDiBOJgo86DsApZu4eIXnFamj8UIlE_nrB-gkjI5BBc2wRxWMUw-e98vY3sLiZJjGPXf4dZ4XP3lpg5Bzb0B9WCQyu2q2CL5GlQprqDqxk"/>
+<img alt="" class="inline-block size-8 rounded-full ring-2 ring-white dark:ring-slate-800 object-cover" data-alt="Portrait of male technician" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPaWJjR95kwg9Y4SRIbjyNljzYSejZCbpFPJ558iO1_8mUP_owoWqjaK8O_Cb07GqmBFAzv5bur7pmM-xCqz_Z16EYFeM8Sqz16yKiuZC_r1rWpQ11xfGG7y94GTxTwNvwitpxyejE-lJM9k_u7VcRZCeL9OWsjoshHbYM9bGp4S64NqPM7QW4mXdRvNCd_ifJatfkafxKdfwL1qauX3Zc979k3BM0dM_8qsjojFKkYM5Lyv0Iybv9v9hbe-3Cj-FSWJU0aXlIfw0"/>
+<div class="flex items-center justify-center size-8 rounded-full ring-2 ring-white dark:ring-slate-800 bg-slate-100 dark:bg-slate-700 text-xs font-medium text-slate-500 dark:text-slate-300">
+                                            +3
+                                        </div>
+</div>
+</div>
+<div class="pt-2 border-t border-slate-100 dark:border-slate-800 flex gap-2">
+<button class="flex-1 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors">View Schedule</button>
+<button class="flex-1 py-2 text-sm font-medium text-white bg-primary/90 hover:bg-primary rounded-lg transition-colors shadow-sm shadow-primary/20">Manage</button>
+</div>
+</div>
+</div>
+<!-- Team Card 3 -->
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-slate-700 p-5 shadow-sm hover:shadow-md transition-shadow group">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-purple-600 dark:text-purple-500">
+<span class="material-symbols-outlined">laptop_mac</span>
+</div>
+<div>
+<h3 class="font-bold text-slate-900 dark:text-white text-base">IT Support Unit</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400">Software &amp; Hardware</p>
+</div>
+</div>
+<button class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between text-sm">
+<span class="text-slate-500 dark:text-slate-400">Team Lead</span>
+<span class="font-medium text-slate-900 dark:text-white">David Chen</span>
+</div>
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="text-xs font-medium text-slate-500 dark:text-slate-400">Members (4)</span>
+<span class="text-xs text-green-600 dark:text-green-400 font-medium bg-green-50 dark:bg-green-900/20 px-2 py-0.5 rounded-full">3 Available</span>
+</div>
+<div class="flex -space-x-2 overflow-hidden py-1">
+<img alt="" class="inline-block size-8 rounded-full ring-2 ring-white dark:ring-slate-800 object-cover" data-alt="Portrait of David Chen" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVtngW_x-ZvA_4Uke0tMjqMRqZ4QeMCBfhtMpCfU8jmie0zVBRQRCxIVfQqwh_Evo8iyyPuU4_tWTXzfuZF123KHjCz2iejer45ALtgcZyQBpZz1e8l4LhQEdalYuOssm7aUQAsPw01n4U8hzEgHUYBGNe8VMQzYTctOnF49_uBw_8nC2voU8pqCVPzawSESR2r1x7WWbFmg9LwV3NQOk7Ite7NEXhdVu3Vsb7DUIOLuTj_iWXqjXPaNMU4UQqtAzcen5B9NzV9D8"/>
+<img alt="" class="inline-block size-8 rounded-full ring-2 ring-white dark:ring-slate-800 object-cover" data-alt="Portrait of male technician" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDR1kMoGYwf6y4sFmwHgnFsN8Tb1TcJjr9Y2zrz99NjekkqOuu-0M1tvbmgbWUd4AR4I-AKhAOkHh4P6m7Mfq49clTOIHqK2EIMBmLxxZXpoJT51JBLqGMpq9-r2klp6eU6cBOlCt9mYI7N-tDsHJQuDI8hZ7sUzEDkE-KdajTc0AZ0bTxQxif1AHIx3Jr4yEsoy4m3GOIq6MtFOkhSPSxkjTjSGx2NybUVYEA_vMtDUzrub_gqh72VdRya6n6zzZs-PFPvK7j45I0"/>
+<img alt="" class="inline-block size-8 rounded-full ring-2 ring-white dark:ring-slate-800 object-cover" data-alt="Portrait of female technician" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCz3sN6w87BtcdJ_06wgIZ922GsdxBooxYgsQwXX187R5VziMBmWYUzvtmWdzgHsyzDPYXnvKesbmt1IvtiJ27jofYh1HnDyBiz79CjmSChq8JfrZ2akUl-PR5LLMBEX9S1fznbIALMTfy_mOXr2YJ9wRogitoFHBblEIUWXyUX8oJcDidTohi_wtgH1TUaB5nv5RFya2liQM28B8GKtpxJYr1RMvM6EGsRjcdVqeH2dG49uSOlcIvp_PapCKjKJG-Y1jOapAK8g5s"/>
+</div>
+</div>
+<div class="pt-2 border-t border-slate-100 dark:border-slate-800 flex gap-2">
+<button class="flex-1 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors">View Schedule</button>
+<button class="flex-1 py-2 text-sm font-medium text-white bg-primary/90 hover:bg-primary rounded-lg transition-colors shadow-sm shadow-primary/20">Manage</button>
+</div>
+</div>
+</div>
+<!-- Team Card 4 -->
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-slate-700 p-5 shadow-sm hover:shadow-md transition-shadow group">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center text-teal-600 dark:text-teal-500">
+<span class="material-symbols-outlined">water_drop</span>
+</div>
+<div>
+<h3 class="font-bold text-slate-900 dark:text-white text-base">Plumbing &amp; HVAC</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400">Facility Maintenance</p>
+</div>
+</div>
+<button class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between text-sm">
+<span class="text-slate-500 dark:text-slate-400">Team Lead</span>
+<span class="font-medium text-slate-900 dark:text-white">Marcus Johnson</span>
+</div>
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="text-xs font-medium text-slate-500 dark:text-slate-400">Members (5)</span>
+<span class="text-xs text-green-600 dark:text-green-400 font-medium bg-green-50 dark:bg-green-900/20 px-2 py-0.5 rounded-full">All Available</span>
+</div>
+<div class="flex -space-x-2 overflow-hidden py-1">
+<img alt="" class="inline-block size-8 rounded-full ring-2 ring-white dark:ring-slate-800 object-cover" data-alt="Portrait of Marcus Johnson" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzqVaptmazPiUlwjFZO3cVnaEuVhJd46U2bIf2E4GR_AdSO7zIzJirOTWzDpcgZLrbZP9TflzKhSeJSVw6DXZIgpXQD3b4zjvqortZFTE2TLTudlxhHsCsQdJzWHCmtVgENck27fvQ4822V38jpAo_iQzwqK4LdyBUDP4pQ-_qtwsxdvWSKfxK5RuUiH_qKeOjlBlO2OhFWp00UL-fJWGojh3YME5BNCJEYmQnLm_Is-X6QF-Ea6mu27Zxzoej5LisJfO4LUp11Ps"/>
+<img alt="" class="inline-block size-8 rounded-full ring-2 ring-white dark:ring-slate-800 object-cover" data-alt="Portrait of female technician" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCRgE6iSuwnE09_LoZFQkdHlpQ9UOf_-JCJZSvEYW-_s_6moZAZDMbt1mA7Kgo6yzmfYghYZr4f0_a0nARxpWl_k-QgLfQqt-H8KWu77pgdJZ6ouhQgNY43CIVEnHS8nLnABDY6vg1Z9FwTtrugmYHY-aNUYLyoO-9vth-4vKBIU7zupryhrUoNqCskf6mpoCFhvOaCwtteRVpr1QwIt4jq6ASDn2ycDvav9Bel8v_ozHVh2EKILbioi7ReUNLRew8CTDpfY1VAoyY"/>
+<div class="flex items-center justify-center size-8 rounded-full ring-2 ring-white dark:ring-slate-800 bg-slate-100 dark:bg-slate-700 text-xs font-medium text-slate-500 dark:text-slate-300">
+                                            +3
+                                        </div>
+</div>
+</div>
+<div class="pt-2 border-t border-slate-100 dark:border-slate-800 flex gap-2">
+<button class="flex-1 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors">View Schedule</button>
+<button class="flex-1 py-2 text-sm font-medium text-white bg-primary/90 hover:bg-primary rounded-lg transition-colors shadow-sm shadow-primary/20">Manage</button>
+</div>
+</div>
+</div>
+<!-- Team Card 5 -->
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-slate-700 p-5 shadow-sm hover:shadow-md transition-shadow group opacity-75">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500">
+<span class="material-symbols-outlined">construction</span>
+</div>
+<div>
+<h3 class="font-bold text-slate-900 dark:text-white text-base">General Repairs</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400">On-Call</p>
+</div>
+</div>
+<button class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between text-sm">
+<span class="text-slate-500 dark:text-slate-400">Team Lead</span>
+<span class="font-medium text-slate-900 dark:text-white italic">Unassigned</span>
+</div>
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="text-xs font-medium text-slate-500 dark:text-slate-400">Members (0)</span>
+<span class="text-xs text-slate-600 dark:text-slate-400 font-medium bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full">Inactive</span>
+</div>
+<div class="flex py-1">
+<div class="h-8 flex items-center text-xs text-slate-400 italic">No members assigned</div>
+</div>
+</div>
+<div class="pt-2 border-t border-slate-100 dark:border-slate-800 flex gap-2">
+<button class="w-full py-2 text-sm font-medium text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">person_add</span>
+                                        Assign Technicians
+                                    </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Unassigned / Detailed List Section -->
+<div class="flex flex-col gap-4 pb-10">
+<div class="flex items-center justify-between">
+<h2 class="text-lg font-bold text-slate-900 dark:text-white">Unassigned Technicians</h2>
+<a class="text-sm font-medium text-primary hover:text-primary/80" href="#">View all personnel</a>
+</div>
+<div class="bg-surface-light dark:bg-surface-dark border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden shadow-sm">
+<table class="w-full text-sm text-left">
+<thead class="bg-slate-50 dark:bg-slate-800 text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">
+<tr>
+<th class="px-6 py-4">Technician</th>
+<th class="px-6 py-4">Specialty</th>
+<th class="px-6 py-4">Status</th>
+<th class="px-6 py-4 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-700 text-slate-600 dark:text-slate-300">
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<img alt="" class="size-9 rounded-full object-cover" data-alt="Portrait of Tom Baker" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAoC-qB4BIzR_cX47p69JwAERDsHspwXHcBTY8XwqDUOnPLQWYOhXIUBlumLibESCrXHNvzuHx0rHFMbMN3Yk1KolTOwyWMxI99OVEDHi5afnplfgxFaU7gEDX3XYmrk3hAxmIWh2NiDxwqeJsGp_xsD5NyXRI0ZeKUDZEyeW82Th9ZUx5iOwMxlNKqrxqsoChOrw7BTBO1P59bkB6GnTR8A9gHxm5szDXtT79yl72aJ6udx13MV0GxriJ6qWAbiA5VdOKpCfGXGnA"/>
+<div class="flex flex-col">
+<span class="font-medium text-slate-900 dark:text-white">Tom Baker</span>
+<span class="text-xs text-slate-500">ID: #T-4402</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300">
+                                            Electrical
+                                        </span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="size-2 rounded-full bg-green-500"></div>
+<span>Available</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-primary hover:text-primary/80 font-medium text-sm flex items-center gap-1 justify-end ml-auto">
+<span class="material-symbols-outlined text-lg">add_circle</span>
+                                            Add to Team
+                                        </button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<img alt="" class="size-9 rounded-full object-cover" data-alt="Portrait of Emily Davis" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCayofoSbUgwaBU4Or4QH14Bo2zLp3H8Roppngjrkka-JFDBXEFMPoRwU-1YNaJdJshCiRv0sN1kKcp_8x-SPl3z8HEiFv2c04J46OFC1SQbO0Eqc-3uIy41TBy_8g590klMrbC-sGOOoPiDCNRbMxYGs538nfHNFhySqsIusZwokKu6j6R1lZAL7P7r_zlJV4odjGT7qDpXtSvF1UvDOo5mYJJ1OsJLXX2MJ25KEGAc5HAVENz5PUNcGGZvSDoxSXYozb6zrGRguc"/>
+<div class="flex flex-col">
+<span class="font-medium text-slate-900 dark:text-white">Emily Davis</span>
+<span class="text-xs text-slate-500">ID: #T-4409</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300">
+                                            HVAC
+                                        </span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="size-2 rounded-full bg-slate-300 dark:bg-slate-600"></div>
+<span class="text-slate-500 dark:text-slate-400">On Leave</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<img alt="" class="size-9 rounded-full object-cover" data-alt="Portrait of Raul Mendez" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQmxhJOQHPkkOgOXbSenOsR3QJ9tDlPtSXi6iKM82L53oABsiagySzQ1ywL48pCb3D5sHVPsnyWc4azLwbjtELm1aoI1tQfClSIqZFyKbPTIP4C5rzUlffkH28VK-eySZJPmcj7C9k9yLyxdBTK5MkjB7s1vsF8K0CYZc6NWQ7p9H1jpVVk-xP7EwZY8JiaunUDzNtLofglsT1B4P8tUq28xV80dpcbyLlNeQOOLP1p8XM4ZkmSEc8ekYjlZtr_qQAJKyjhSpXaeg"/>
+<div class="flex flex-col">
+<span class="font-medium text-slate-900 dark:text-white">Raul Mendez</span>
+<span class="text-xs text-slate-500">ID: #T-4415</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300">
+                                            General
+                                        </span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="size-2 rounded-full bg-green-500"></div>
+<span>Available</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-primary hover:text-primary/80 font-medium text-sm flex items-center gap-1 justify-end ml-auto">
+<span class="material-symbols-outlined text-lg">add_circle</span>
+                                            Add to Team
+                                        </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

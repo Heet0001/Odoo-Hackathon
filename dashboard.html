@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GearGuard Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+            extend: {
+                colors: {
+                "primary": "#135bec",
+                "background-light": "#f6f6f8",
+                "background-dark": "#101622",
+                },
+                fontFamily: {
+                "display": ["Inter", "sans-serif"]
+                },
+                borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+            },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for cleaner look */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #334155;
+        }
+        .dark ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 overflow-hidden">
+<div class="flex h-screen w-full">
+<!-- Side Navigation -->
+<aside class="flex w-64 flex-col border-r border-slate-200 bg-white dark:border-slate-800 dark:bg-[#111827] flex-shrink-0 transition-all duration-300">
+<div class="flex h-full flex-col justify-between p-4">
+<div class="flex flex-col gap-4">
+<!-- Profile / Logo Area -->
+<div class="flex gap-3 items-center px-2 py-2">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border border-slate-200 dark:border-slate-700" data-alt="GearGuard Logo abstract geometric shape" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC38DBKetSyBd9sCb8SLqkbkOJPAnpchIpARXT5U2bpStWBM2b1afcZhCQOga_Q_X1tj20KLtIpDR-rLGXkKCXlmlQebusoxwCjpwo2OwYOYQcOk3m5SJ_x075_OplCD_FpzsSWMgfe5Prl6xe5D9RV7n40DTaD1_QRsqShuKjpnlzPgSaPOFT-cdKWokc_GKINimlF0m6mpAqKbEd3j_fdp65mcAxuV_iw20Jyu2FSYUwA7MsBXCZgEOfu9NPVj_wcbbqCkqSawUQ");'></div>
+<div class="flex flex-col">
+<h1 class="text-slate-900 dark:text-white text-base font-bold leading-normal">GearGuard</h1>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-normal leading-normal">Maintenance Manager</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="flex flex-col gap-2 mt-4">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary text-white shadow-md shadow-primary/20 group transition-all" href="#">
+<span class="material-symbols-outlined text-[24px]">dashboard</span>
+<p class="text-sm font-medium leading-normal">Dashboard</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">build</span>
+<p class="text-sm font-medium leading-normal">Equipment</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">group</span>
+<p class="text-sm font-medium leading-normal">Teams</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">assignment</span>
+<p class="text-sm font-medium leading-normal">Maintenance</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">description</span>
+<p class="text-sm font-medium leading-normal">Reports</p>
+</a>
+</nav>
+</div>
+<!-- Bottom Actions -->
+<div class="flex flex-col gap-4">
+<div class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">settings</span>
+<p class="text-sm font-medium leading-normal">Settings</p>
+</a>
+</div>
+<button class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors text-sm font-bold leading-normal tracking-[0.015em] border border-slate-200 dark:border-slate-700">
+<span class="truncate">Log Out</span>
+</button>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col h-full overflow-hidden bg-background-light dark:bg-background-dark relative">
+<!-- Top Header -->
+<header class="h-16 flex items-center justify-between px-6 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] flex-shrink-0 z-10">
+<!-- Breadcrumbs -->
+<div class="flex items-center gap-2">
+<a class="text-slate-500 hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Home</a>
+<span class="text-slate-400 text-sm font-medium leading-normal">/</span>
+<span class="text-slate-900 dark:text-white text-sm font-medium leading-normal">Dashboard</span>
+</div>
+<!-- Search Bar -->
+<div class="flex-1 max-w-lg mx-6">
+<label class="flex flex-col w-full">
+<div class="flex w-full items-center rounded-lg h-10 bg-slate-100 dark:bg-slate-800 focus-within:ring-2 ring-primary/50 transition-all overflow-hidden border border-transparent focus-within:border-primary/50">
+<div class="text-slate-400 flex items-center justify-center pl-3">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</div>
+<input class="w-full bg-transparent border-none focus:ring-0 text-slate-900 dark:text-white placeholder:text-slate-400 h-full px-3 text-sm" placeholder="Search asset IDs or ticket numbers..."/>
+</div>
+</label>
+</div>
+<!-- Header Actions -->
+<div class="flex items-center gap-4">
+<button class="text-slate-500 hover:text-primary transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 size-2 bg-red-500 rounded-full border-2 border-white dark:border-[#111827]"></span>
+</button>
+<div class="size-8 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden" data-alt="User profile photo of a smiling man" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCfE65f3-2vtosqqocOHZdyIRbmJAESASXATHeOZ0cYtaOarsKUWRaWSkFe6cdKeXw7nqgZMW4wDD2bsQ7j1HI5OqW6q7W4xY4q3NVlF3Yl9JgIE876o56tBCXMP8XDqOisg9jKOkajt6hyWYw5AOybRbTmRQTfhgmpWRwG4gYKClQ8UwiILxtQpdvPizvXMVqkbfyTh9L2DfJKR3Iax1Glcbg4dDfEYsSCy8Av4AddqX1ngeWrMqqIJOHuYwQUcqXnGSnVnXMTd2Q'); background-size: cover;"></div>
+</div>
+</header>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto p-6 scroll-smooth">
+<div class="max-w-[1400px] mx-auto flex flex-col gap-6">
+<!-- Page Heading -->
+<div class="flex flex-wrap justify-between items-end gap-4">
+<div class="flex flex-col gap-1">
+<h2 class="text-slate-900 dark:text-white text-3xl font-bold leading-tight tracking-tight">Dashboard Overview</h2>
+<p class="text-slate-500 dark:text-slate-400 text-base font-normal">Good Morning, Manager. Here is the facility status.</p>
+</div>
+<button class="flex items-center gap-2 justify-center rounded-lg h-10 px-5 bg-primary hover:bg-blue-700 text-white shadow-lg shadow-blue-500/30 transition-all text-sm font-bold">
+<span class="material-symbols-outlined text-[20px]">add</span>
+<span>New Request</span>
+</button>
+</div>
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<!-- Stat Card 1 -->
+<div class="flex flex-col gap-2 rounded-xl p-5 bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700 shadow-sm">
+<div class="flex justify-between items-start">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Total Equipment</p>
+<span class="material-symbols-outlined text-primary bg-primary/10 p-1 rounded">inventory_2</span>
+</div>
+<div class="flex items-baseline gap-2 mt-1">
+<p class="text-slate-900 dark:text-white text-2xl font-bold">142</p>
+<span class="text-green-600 text-xs font-medium bg-green-100 dark:bg-green-900/30 px-1.5 py-0.5 rounded">+2 this week</span>
+</div>
+</div>
+<!-- Stat Card 2 -->
+<div class="flex flex-col gap-2 rounded-xl p-5 bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700 shadow-sm">
+<div class="flex justify-between items-start">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Open Requests</p>
+<span class="material-symbols-outlined text-orange-500 bg-orange-500/10 p-1 rounded">assignment_late</span>
+</div>
+<div class="flex items-baseline gap-2 mt-1">
+<p class="text-slate-900 dark:text-white text-2xl font-bold">8</p>
+<span class="text-red-600 text-xs font-medium bg-red-100 dark:bg-red-900/30 px-1.5 py-0.5 rounded">3 High Priority</span>
+</div>
+</div>
+<!-- Stat Card 3 -->
+<div class="flex flex-col gap-2 rounded-xl p-5 bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700 shadow-sm">
+<div class="flex justify-between items-start">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Active Teams</p>
+<span class="material-symbols-outlined text-purple-500 bg-purple-500/10 p-1 rounded">groups</span>
+</div>
+<div class="flex items-baseline gap-2 mt-1">
+<p class="text-slate-900 dark:text-white text-2xl font-bold">5<span class="text-slate-400 text-lg font-normal">/6</span></p>
+<span class="text-slate-500 dark:text-slate-400 text-xs font-normal">Deployed on site</span>
+</div>
+</div>
+<!-- Stat Card 4 -->
+<div class="flex flex-col gap-2 rounded-xl p-5 bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700 shadow-sm">
+<div class="flex justify-between items-start">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Maintenance Due</p>
+<span class="material-symbols-outlined text-blue-500 bg-blue-500/10 p-1 rounded">schedule</span>
+</div>
+<div class="flex items-baseline gap-2 mt-1">
+<p class="text-slate-900 dark:text-white text-2xl font-bold">12</p>
+<span class="text-slate-500 dark:text-slate-400 text-xs font-normal">Next 48h</span>
+</div>
+</div>
+</div>
+<!-- Main Grid: Table & Secondary Info -->
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+<!-- Left Column: Priority Requests Table -->
+<div class="xl:col-span-2 flex flex-col bg-white dark:bg-[#1e293b] rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+<div class="px-6 py-4 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
+<h3 class="text-slate-900 dark:text-white font-bold text-lg">Priority Maintenance Requests</h3>
+<a class="text-primary text-sm font-medium hover:underline" href="#">View All</a>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-slate-50 dark:bg-slate-800/50">
+<tr>
+<th class="px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Ticket ID</th>
+<th class="px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Asset</th>
+<th class="px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Issue Type</th>
+<th class="px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Assigned Team</th>
+<th class="px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
+<th class="px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+<tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4 text-sm font-medium text-slate-900 dark:text-white">#REQ-2024</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded bg-slate-100 dark:bg-slate-700 bg-cover bg-center" data-alt="Small thumbnail of an industrial machine gear" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA4GZjPc5V559Brm4tNl4SQfoKt9bSe_6Nk9QSaqtvoMD5tN6azwNu1bMUy7Mmdm1skBphmXfBWifCMbHa_RFBaaHfyCHwILVSSWDXdk7uopYpuIMqd5c2qDKKFIgzd6pJvMxj2rGvKz0Z5d0fX1lqYG1aARAyI4D__XtBxqoMZ9_ihFewnzBYQoDNTOcp4OY0fSAK9Ia0h9mlFt-zvILkOlqDswBl-Go8b6HAnofH8KmFtr2LL_hJ30Ls8a7jleGk--_kP2sii4mk')"></div>
+<span>Hydraulic Press A1</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">Fluid Leakage</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">Alpha Team</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 border border-red-200 dark:border-red-800">
+<span class="size-1.5 rounded-full bg-red-500"></span> Critical
+                                            </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</td>
+</tr>
+<tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4 text-sm font-medium text-slate-900 dark:text-white">#REQ-2023</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded bg-slate-100 dark:bg-slate-700 bg-cover bg-center" data-alt="Small thumbnail of a construction conveyor belt" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA4nP2F3elrvo9zVMBtZfF5-MmRqnsifhDOhPwdO7zgdwDe74ue3DgSlbsVX3CfYW2m1l-c8JfhUWPKOduG_o2LYSCY1YY4oF4G7_JGhndyRpOpPIL-8pnjqu86jt3pFiAFjNxAGOGDUxtkgsay4LHNWs_p82yba7I3VyT6oid9po3J7kkIpIT0uBdFCdc1a4csy2XxXMRa9vwkqjWsCLfCxHb0uCTsaLSVTnymLCgdyegxtr_0D_H3qM0kl3VEvKJx_BLVEUNSQks')"></div>
+<span>Conveyor Belt 04</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">Motor Overheat</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">Beta Team</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400 border border-yellow-200 dark:border-yellow-800">
+<span class="size-1.5 rounded-full bg-yellow-500"></span> In Progress
+                                            </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</td>
+</tr>
+<tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4 text-sm font-medium text-slate-900 dark:text-white">#REQ-2022</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded bg-slate-100 dark:bg-slate-700 bg-cover bg-center" data-alt="Small thumbnail of a forklift truck" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB7LX7uJPfVuLB_FE4wYeoFTr1t1fe1zcNIJ5djJ-MbUTlTKAGoRuuMKg6NCP94sA7ORce89ZuWvhuRXhHUbByDvf3l8ORkXoEqwgU9DyW_Nj4WUw7U_NOG9ChoSs0zU13YnAdZAEz6PA4k1hpA5X-GGiqL9NFcG8uPF_r11FPsg2p6myGco-pv5SItKmJXnGYo7Ow02KBq3x2iJMXc4N4UgxwXoW_jOEOW24IDkvZijYa3aSDExUKz7bC1Gi3e9sVvsooB-P-LVl0')"></div>
+<span>Forklift Unit 12</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">Tire Replacement</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">--</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600">
+<span class="size-1.5 rounded-full bg-slate-500"></span> Pending
+                                            </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Right Column: Status & Activity -->
+<div class="flex flex-col gap-6">
+<!-- Asset Status Chart -->
+<div class="bg-white dark:bg-[#1e293b] rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm p-6">
+<h3 class="text-slate-900 dark:text-white font-bold text-lg mb-4">Asset Status</h3>
+<div class="flex items-center justify-between">
+<!-- CSS-only Donut Chart -->
+<div class="relative size-32 rounded-full flex items-center justify-center" style="background: conic-gradient(#135bec 0% 75%, #f59e0b 75% 90%, #ef4444 90% 100%);">
+<div class="size-24 bg-white dark:bg-[#1e293b] rounded-full flex flex-col items-center justify-center">
+<span class="text-2xl font-bold text-slate-900 dark:text-white">142</span>
+<span class="text-[10px] text-slate-500 uppercase tracking-wide">Total</span>
+</div>
+</div>
+<div class="flex flex-col gap-3">
+<div class="flex items-center gap-2">
+<span class="size-3 rounded-full bg-primary"></span>
+<div class="flex flex-col">
+<span class="text-xs text-slate-500">Operational</span>
+<span class="text-sm font-bold text-slate-900 dark:text-white">75%</span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="size-3 rounded-full bg-yellow-500"></span>
+<div class="flex flex-col">
+<span class="text-xs text-slate-500">Maintenance</span>
+<span class="text-sm font-bold text-slate-900 dark:text-white">15%</span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="size-3 rounded-full bg-red-500"></span>
+<div class="flex flex-col">
+<span class="text-xs text-slate-500">Broken</span>
+<span class="text-sm font-bold text-slate-900 dark:text-white">10%</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Activity -->
+<div class="bg-white dark:bg-[#1e293b] rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm p-6 flex-1">
+<h3 class="text-slate-900 dark:text-white font-bold text-lg mb-4">Recent Activity</h3>
+<div class="relative pl-2 border-l border-slate-200 dark:border-slate-700 space-y-6">
+<div class="relative pl-6">
+<div class="absolute -left-[5px] top-1.5 size-2.5 rounded-full bg-primary ring-4 ring-white dark:ring-[#1e293b]"></div>
+<p class="text-sm text-slate-900 dark:text-white font-medium">New ticket created #REQ-2024</p>
+<p class="text-xs text-slate-500 mt-0.5">Hydraulic Press A1 - Fluid Leakage</p>
+<p class="text-xs text-slate-400 mt-1">10 minutes ago</p>
+</div>
+<div class="relative pl-6">
+<div class="absolute -left-[5px] top-1.5 size-2.5 rounded-full bg-green-500 ring-4 ring-white dark:ring-[#1e293b]"></div>
+<p class="text-sm text-slate-900 dark:text-white font-medium">Maintenance Completed</p>
+<p class="text-xs text-slate-500 mt-0.5">Generator B2 is back online</p>
+<p class="text-xs text-slate-400 mt-1">2 hours ago</p>
+</div>
+<div class="relative pl-6">
+<div class="absolute -left-[5px] top-1.5 size-2.5 rounded-full bg-slate-300 dark:bg-slate-600 ring-4 ring-white dark:ring-[#1e293b]"></div>
+<p class="text-sm text-slate-900 dark:text-white font-medium">Shift Report Generated</p>
+<p class="text-xs text-slate-500 mt-0.5">Weekly compliance report auto-generated</p>
+<p class="text-xs text-slate-400 mt-1">Yesterday, 5:00 PM</p>
+</div>
+</div>
+<button class="w-full mt-6 py-2 text-sm text-primary font-medium hover:bg-slate-50 dark:hover:bg-slate-800 rounded transition-colors">
+                                View Activity Log
+                            </button>
+</div>
+</div>
+</div>
+<!-- Bottom Row: Maintenance Schedule Preview -->
+<div class="bg-white dark:bg-[#1e293b] rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+<div class="px-6 py-4 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
+<h3 class="text-slate-900 dark:text-white font-bold text-lg">Upcoming Scheduled Maintenance (48h)</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-slate-200 dark:divide-slate-700">
+<!-- Item 1 -->
+<div class="p-4 flex items-center gap-4 hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<div class="flex flex-col items-center justify-center size-12 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700">
+<span class="text-xs font-bold uppercase text-slate-500">Oct</span>
+<span class="text-lg font-bold leading-none">24</span>
+</div>
+<div class="flex flex-col">
+<p class="text-sm font-bold text-slate-900 dark:text-white">HVAC System 2</p>
+<p class="text-xs text-slate-500">09:00 AM • Routine Check</p>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="p-4 flex items-center gap-4 hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<div class="flex flex-col items-center justify-center size-12 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700">
+<span class="text-xs font-bold uppercase text-slate-500">Oct</span>
+<span class="text-lg font-bold leading-none">24</span>
+</div>
+<div class="flex flex-col">
+<p class="text-sm font-bold text-slate-900 dark:text-white">Safety Sensors</p>
+<p class="text-xs text-slate-500">02:00 PM • Calibration</p>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="p-4 flex items-center gap-4 hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<div class="flex flex-col items-center justify-center size-12 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700">
+<span class="text-xs font-bold uppercase text-slate-500">Oct</span>
+<span class="text-lg font-bold leading-none">25</span>
+</div>
+<div class="flex flex-col">
+<p class="text-sm font-bold text-slate-900 dark:text-white">Main Conveyor</p>
+<p class="text-xs text-slate-500">08:00 AM • Lubrication</p>
+</div>
+</div>
+<!-- Item 4 -->
+<div class="p-4 flex items-center gap-4 hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<div class="flex flex-col items-center justify-center size-12 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700">
+<span class="text-xs font-bold uppercase text-slate-500">Oct</span>
+<span class="text-lg font-bold leading-none">25</span>
+</div>
+<div class="flex flex-col">
+<p class="text-sm font-bold text-slate-900 dark:text-white">Server Rack 3</p>
+<p class="text-xs text-slate-500">11:00 AM • Dust Cleaning</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<footer class="mt-8 text-center text-xs text-slate-400 py-4">
+                © 2024 GearGuard Maintenance Systems. All rights reserved.
+            </footer>
+</div>
+</main>
+</div>
+</body></html>

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>New Maintenance Request</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;family=Noto+Sans:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom scrollbar for cleaner look */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+        
+        .material-symbols-outlined {
+            font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24
+        }
+        /* Filled icon variant class */
+        .icon-filled {
+            font-variation-settings:
+            'FILL' 1,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-[#0d121b] dark:text-white">
+<div class="relative flex h-screen w-full bg-background-light dark:bg-background-dark overflow-hidden group/design-root">
+<!-- SideNavBar -->
+<aside class="flex flex-col w-64 h-full border-r border-[#e7ebf3] dark:border-gray-800 bg-[#f8f9fc] dark:bg-[#111827] flex-shrink-0">
+<div class="p-4 pb-2 flex items-center gap-3">
+<div class="bg-center bg-no-repeat bg-cover rounded-lg size-10 shadow-sm" data-alt="Maintenance Manager Logo abstract geometric shape" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAmoy5p-Z3nYQFFp1_dHy3BK9oc7yzLYswHj-vhjjTi1Kn19cKpO6jrPKZittdvG6T4i-KdNKpMiunmftyeAeJl4IAviFXP1LMI94Cv_k774DgjS9L21_MU0VwutqSgVvzifCdm2N7MVCep_bUy-dALe_DNqUD6MyyypHDM_GlD0NT_HsD3fcz4rDVbr4pdNYU9QLa_qVeA5FmfMppLhrph5dnDZTkSpFVCANgsq0fNtzo8gc_FHb8Q17Tyc0XNSVqBBR9oq3c7DeA");'></div>
+<h1 class="text-[#0d121b] dark:text-white text-lg font-bold leading-normal">MaintManager</h1>
+</div>
+<div class="flex flex-col gap-2 p-4 flex-1 overflow-y-auto">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#4c669a] dark:text-gray-400 hover:bg-[#e7ebf3] dark:hover:bg-gray-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">dashboard</span>
+<p class="text-sm font-medium leading-normal">Dashboard</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 text-primary dark:text-primary dark:bg-primary/20" href="#">
+<span class="material-symbols-outlined icon-filled text-[24px]">assignment</span>
+<p class="text-sm font-medium leading-normal">Requests</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#4c669a] dark:text-gray-400 hover:bg-[#e7ebf3] dark:hover:bg-gray-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">inventory_2</span>
+<p class="text-sm font-medium leading-normal">Assets</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#4c669a] dark:text-gray-400 hover:bg-[#e7ebf3] dark:hover:bg-gray-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">groups</span>
+<p class="text-sm font-medium leading-normal">Teams</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#4c669a] dark:text-gray-400 hover:bg-[#e7ebf3] dark:hover:bg-gray-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">calendar_month</span>
+<p class="text-sm font-medium leading-normal">Schedule</p>
+</a>
+<div class="mt-auto pt-4 border-t border-[#e7ebf3] dark:border-gray-800">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#4c669a] dark:text-gray-400 hover:bg-[#e7ebf3] dark:hover:bg-gray-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">settings</span>
+<p class="text-sm font-medium leading-normal">Settings</p>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col h-full overflow-hidden bg-white dark:bg-[#101622]">
+<!-- TopNavBar -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-[#e7ebf3] dark:border-gray-800 px-8 py-4 bg-white dark:bg-[#101622] z-10">
+<div class="flex items-center gap-4 text-[#0d121b] dark:text-white">
+<button class="size-8 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-[#4c669a] dark:text-gray-400">
+<span class="material-symbols-outlined">menu_open</span>
+</button>
+<div class="flex flex-col">
+<h2 class="text-[#0d121b] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">New Maintenance Request</h2>
+<p class="text-xs text-[#4c669a] dark:text-gray-400 font-medium">Draft - ID #REQ-2023-891</p>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<button class="relative text-[#4c669a] dark:text-gray-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 size-2 bg-red-500 rounded-full border-2 border-white dark:border-[#101622]"></span>
+</button>
+<div class="flex items-center gap-3 pl-6 border-l border-[#e7ebf3] dark:border-gray-800">
+<div class="text-right hidden sm:block">
+<p class="text-sm font-medium text-[#0d121b] dark:text-white">Alex Morgan</p>
+<p class="text-xs text-[#4c669a] dark:text-gray-400">Facility Manager</p>
+</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-white dark:border-gray-700 shadow-sm" data-alt="Portrait of a smiling facility manager" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB-2roQlREDbFnC3BlwzvS_QyphBII-sfKeBMLxpcUkl9Bc5A-qBpB4y21a_93-W7hA8NXOLKjVga05U5LjPxUGMrGYDIQ3ugi8ybyiUyI_k3A3m8G2K-j4t83xUpg1D1kZo8m1HXZtsWBiWsLMktp2SFIlxLodISNwZu4cb6hxtnJd7X7dsyD_8HWcZ_DG0pwQEc_RNTb9y1YnUNdLJhQLjHBW71YRrHUAeA9y0cP-K1sAH-1ODO3HqDf3ZIT5cUyZdATcKQEMuHs");'></div>
+</div>
+</div>
+</header>
+<!-- Page Scrollable Content -->
+<div class="flex-1 overflow-y-auto p-8">
+<div class="mx-auto max-w-4xl">
+<!-- PageHeading -->
+<div class="mb-8">
+<div class="flex flex-wrap justify-between gap-3">
+<div class="flex min-w-72 flex-col gap-2">
+<p class="text-[#0d121b] dark:text-white text-3xl font-black leading-tight tracking-[-0.033em]">Request Details</p>
+<p class="text-[#4c669a] dark:text-gray-400 text-base font-normal leading-normal">Provide the necessary information to initiate a maintenance ticket. Fields marked with * are required.</p>
+</div>
+<div class="flex items-end gap-3">
+<button class="flex items-center justify-center rounded-lg border border-[#e7ebf3] dark:border-gray-700 bg-white dark:bg-gray-800 px-4 py-2 text-sm font-medium text-[#0d121b] dark:text-white shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                Cancel
+                            </button>
+<button class="flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-600 transition-colors gap-2">
+<span class="material-symbols-outlined text-[20px]">send</span>
+                                Submit Request
+                            </button>
+</div>
+</div>
+</div>
+<!-- Form Card -->
+<div class="bg-white dark:bg-[#1a2234] rounded-xl border border-[#e7ebf3] dark:border-gray-800 shadow-sm overflow-hidden">
+<!-- Section 1: Context -->
+<div class="p-6 border-b border-[#e7ebf3] dark:border-gray-800">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary">info</span>
+<h3 class="text-[#0d121b] dark:text-white text-lg font-bold leading-tight">Request Context</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Type Selector -->
+<div class="md:col-span-4 flex flex-col gap-2">
+<label class="text-sm font-medium text-[#0d121b] dark:text-white">Request Type</label>
+<!-- SegmentedButtons -->
+<div class="flex h-10 w-full items-center justify-center rounded-lg bg-[#e7ebf3] dark:bg-gray-800 p-1">
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-md px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-[#2a3449] has-[:checked]:shadow-sm has-[:checked]:text-primary text-[#4c669a] dark:text-gray-400 text-sm font-medium transition-all">
+<span class="truncate">Corrective</span>
+<input checked="" class="invisible w-0" name="request_type" type="radio" value="Corrective"/>
+</label>
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-md px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-[#2a3449] has-[:checked]:shadow-sm has-[:checked]:text-primary text-[#4c669a] dark:text-gray-400 text-sm font-medium transition-all">
+<span class="truncate">Preventive</span>
+<input class="invisible w-0" name="request_type" type="radio" value="Preventive"/>
+</label>
+</div>
+</div>
+<!-- Subject -->
+<div class="md:col-span-8 flex flex-col gap-2">
+<label class="text-sm font-medium text-[#0d121b] dark:text-white" for="subject">Subject *</label>
+<input class="w-full h-10 rounded-lg border border-[#e7ebf3] dark:border-gray-700 bg-white dark:bg-gray-900 px-3 text-sm text-[#0d121b] dark:text-white placeholder-[#4c669a] dark:placeholder-gray-500 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" id="subject" placeholder="e.g. HVAC Unit 3 Not Cooling" type="text"/>
+</div>
+</div>
+</div>
+<!-- Section 2: Asset Identification -->
+<div class="p-6 border-b border-[#e7ebf3] dark:border-gray-800 bg-slate-50/50 dark:bg-slate-900/20">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary">precision_manufacturing</span>
+<h3 class="text-[#0d121b] dark:text-white text-lg font-bold leading-tight">Equipment Details</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Search Asset -->
+<div class="md:col-span-2 flex flex-col gap-2 relative">
+<label class="text-sm font-medium text-[#0d121b] dark:text-white" for="asset_search">Select Equipment *</label>
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 text-[#4c669a] material-symbols-outlined text-[20px]">search</span>
+<input class="w-full h-10 rounded-lg border border-[#e7ebf3] dark:border-gray-700 bg-white dark:bg-gray-900 pl-10 pr-4 text-sm text-[#0d121b] dark:text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" id="asset_search" list="assets" placeholder="Search by name, ID, or tag..." type="text"/>
+<!-- Datalist for simple search simulation -->
+<datalist id="assets">
+<option value="HVAC Unit A-12">
+</option><option value="Generator Backup G-02">
+</option><option value="Conveyor Belt Main-01">
+</option></datalist>
+</div>
+<p class="text-xs text-[#4c669a]">Selecting an asset will auto-fill category and team info.</p>
+</div>
+<!-- Auto-filled Category -->
+<div class="flex flex-col gap-2">
+<label class="text-sm font-medium text-[#0d121b] dark:text-white flex items-center gap-1">
+                                    Category
+                                    <span class="material-symbols-outlined text-xs text-[#4c669a]" title="Auto-filled">lock</span>
+</label>
+<div class="w-full h-10 rounded-lg border border-[#e7ebf3] dark:border-gray-700 bg-[#f8f9fc] dark:bg-gray-800 px-3 flex items-center">
+<span class="text-sm text-[#4c669a] dark:text-gray-400">Heating &amp; Cooling</span>
+</div>
+</div>
+<!-- Auto-filled Team -->
+<div class="flex flex-col gap-2">
+<label class="text-sm font-medium text-[#0d121b] dark:text-white flex items-center gap-1">
+                                    Responsible Team
+                                    <span class="material-symbols-outlined text-xs text-[#4c669a]" title="Auto-filled">lock</span>
+</label>
+<div class="w-full h-10 rounded-lg border border-[#e7ebf3] dark:border-gray-700 bg-[#f8f9fc] dark:bg-gray-800 px-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-[#4c669a]">group</span>
+<span class="text-sm text-[#4c669a] dark:text-gray-400">Facilities Team Alpha</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Section 3: Scheduling & Description -->
+<div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">schedule</span>
+<h3 class="text-[#0d121b] dark:text-white text-lg font-bold leading-tight">Scheduling</h3>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="flex flex-col gap-2">
+<label class="text-sm font-medium text-[#0d121b] dark:text-white" for="date">Scheduled Date</label>
+<input class="w-full h-10 rounded-lg border border-[#e7ebf3] dark:border-gray-700 bg-white dark:bg-gray-900 px-3 text-sm text-[#0d121b] dark:text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" id="date" type="date"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-sm font-medium text-[#0d121b] dark:text-white" for="duration">Est. Duration</label>
+<div class="flex gap-2">
+<input class="w-full h-10 rounded-lg border border-[#e7ebf3] dark:border-gray-700 bg-white dark:bg-gray-900 px-3 text-sm text-[#0d121b] dark:text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" id="duration" placeholder="0" type="number"/>
+<select class="h-10 rounded-lg border border-[#e7ebf3] dark:border-gray-700 bg-[#f8f9fc] dark:bg-gray-800 px-2 text-sm text-[#0d121b] dark:text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none">
+<option>Min</option>
+<option selected="">Hrs</option>
+<option>Days</option>
+</select>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-2 mt-2">
+<label class="text-sm font-medium text-[#0d121b] dark:text-white">Priority</label>
+<div class="flex gap-3">
+<label class="flex items-center gap-2 cursor-pointer">
+<input class="text-red-500 focus:ring-red-500" name="priority" type="radio"/>
+<span class="text-sm text-[#0d121b] dark:text-white">High</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer">
+<input checked="" class="text-orange-500 focus:ring-orange-500" name="priority" type="radio"/>
+<span class="text-sm text-[#0d121b] dark:text-white">Medium</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer">
+<input class="text-green-500 focus:ring-green-500" name="priority" type="radio"/>
+<span class="text-sm text-[#0d121b] dark:text-white">Low</span>
+</label>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-sm font-medium text-[#0d121b] dark:text-white" for="description">Description / Instructions</label>
+<textarea class="w-full rounded-lg border border-[#e7ebf3] dark:border-gray-700 bg-white dark:bg-gray-900 p-3 text-sm text-[#0d121b] dark:text-white placeholder-[#4c669a] focus:border-primary focus:ring-1 focus:ring-primary outline-none resize-none" id="description" placeholder="Describe the issue in detail, including error codes or specific sounds..." rows="8"></textarea>
+</div>
+</div>
+<!-- Section 4: Attachments -->
+<div class="p-6 border-t border-[#e7ebf3] dark:border-gray-800">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary">attach_file</span>
+<h3 class="text-[#0d121b] dark:text-white text-lg font-bold leading-tight">Attachments</h3>
+</div>
+<div class="border-2 border-dashed border-[#e7ebf3] dark:border-gray-700 rounded-xl p-8 flex flex-col items-center justify-center text-center hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors cursor-pointer group">
+<div class="bg-primary/10 text-primary p-3 rounded-full mb-3 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[32px]">cloud_upload</span>
+</div>
+<p class="text-sm font-medium text-[#0d121b] dark:text-white">Click to upload or drag and drop</p>
+<p class="text-xs text-[#4c669a] dark:text-gray-400 mt-1">SVG, PNG, JPG or PDF (max. 10MB)</p>
+</div>
+</div>
+<!-- Footer Action Mobile Only (Duplicate for responsiveness) -->
+<div class="p-4 border-t border-[#e7ebf3] dark:border-gray-800 flex md:hidden justify-end gap-3">
+<button class="flex items-center justify-center rounded-lg border border-[#e7ebf3] dark:border-gray-700 bg-white dark:bg-gray-800 px-4 py-2 text-sm font-medium text-[#0d121b] dark:text-white">
+                            Cancel
+                        </button>
+<button class="flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white shadow-sm">
+                            Submit Request
+                        </button>
+</div>
+</div>
+<p class="text-center text-xs text-[#4c669a] dark:text-gray-500 mt-8 mb-4">
+                    © 2023 MaintManager Inc. All rights reserved.
+                </p>
+</div>
+</div>
+</main>
+</div>
+</body></html>

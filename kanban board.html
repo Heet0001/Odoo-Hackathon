@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Maintenance Kanban Board</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                        "card-light": "#ffffff",
+                        "card-dark": "#1a2332",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for horizontal scrolling if needed */
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        /* Smooth drag placeholder styles (simulated) */
+        .drag-ghost {
+            border: 2px dashed #135bec;
+            background-color: rgba(19, 91, 236, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-[#0d121b] dark:text-[#e0e0e0] font-display min-h-screen flex flex-col overflow-hidden">
+<!-- Top Navigation -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#e7ebf3] dark:border-gray-800 px-6 py-3 bg-card-light dark:bg-card-dark shrink-0 z-20">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-4 text-[#0d121b] dark:text-white">
+<div class="size-8 flex items-center justify-center bg-primary rounded-lg text-white">
+<span class="material-symbols-outlined text-[20px]">handyman</span>
+</div>
+<h2 class="text-[#0d121b] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">MaintManager</h2>
+</div>
+<div class="hidden md:flex items-center gap-1">
+<a class="text-[#4c669a] dark:text-gray-400 hover:text-primary hover:bg-primary/10 px-3 py-2 rounded-lg text-sm font-medium leading-normal transition-colors" href="#">Dashboard</a>
+<a class="text-primary dark:text-primary bg-primary/10 px-3 py-2 rounded-lg text-sm font-bold leading-normal transition-colors" href="#">Board</a>
+<a class="text-[#4c669a] dark:text-gray-400 hover:text-primary hover:bg-primary/10 px-3 py-2 rounded-lg text-sm font-medium leading-normal transition-colors" href="#">Assets</a>
+<a class="text-[#4c669a] dark:text-gray-400 hover:text-primary hover:bg-primary/10 px-3 py-2 rounded-lg text-sm font-medium leading-normal transition-colors" href="#">Teams</a>
+<a class="text-[#4c669a] dark:text-gray-400 hover:text-primary hover:bg-primary/10 px-3 py-2 rounded-lg text-sm font-medium leading-normal transition-colors" href="#">Settings</a>
+</div>
+</div>
+<div class="flex flex-1 justify-end gap-4 items-center">
+<label class="hidden lg:flex flex-col min-w-40 !h-10 max-w-64">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+<div class="text-[#4c669a] flex border-none bg-[#e7ebf3] dark:bg-gray-800 items-center justify-center pl-4 rounded-l-lg border-r-0">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#0d121b] dark:text-white focus:outline-0 focus:ring-0 border-none bg-[#e7ebf3] dark:bg-gray-800 focus:border-none h-full placeholder:text-[#4c669a] px-4 rounded-l-none border-l-0 pl-2 text-sm font-normal leading-normal" placeholder="Search tickets..." value=""/>
+</div>
+</label>
+<div class="flex gap-2">
+<button class="flex size-10 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-[#e7ebf3] dark:bg-gray-800 text-[#0d121b] dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-white dark:border-gray-700 shadow-sm" data-alt="User profile avatar showing a smiling person" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAWjedkEbwvcdDRwg1tjyyjJ736Gtj_Qcwwk0Q4wYiR3xfJMLEowP2siSnpg-T9-ku2QeatL8If3xR-a3l1gB2p_hDVt1GIs9DpYG6q-eympUp4AJeG81QIeObSPmjwFJ_w9DWPzG1PCxhQmaKblwzcJuNFmNgndGTvBDB0kfMkwpEZr3F5ksccoBm8CisrUH8s5XKoRtHy7RbunRetvnpcK8-qC84FNULq9YcwvJcZyyWR_mXrpzOnll_1D53ZnjCxZKA5hJ941pI");'></div>
+</div>
+</div>
+</header>
+<!-- Main Board Area -->
+<main class="flex-1 flex flex-col overflow-hidden w-full max-w-[1600px] mx-auto">
+<!-- Header & Filters -->
+<div class="px-6 py-6 shrink-0 flex flex-col gap-6">
+<div class="flex flex-wrap justify-between items-end gap-4">
+<div class="flex min-w-72 flex-col gap-2">
+<h1 class="text-[#0d121b] dark:text-white text-3xl font-black leading-tight tracking-[-0.033em]">Maintenance Board</h1>
+<p class="text-[#4c669a] dark:text-gray-400 text-sm font-normal leading-normal">Manage requests, assign technicians, and track progress across the facility.</p>
+</div>
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-10 px-4 bg-primary hover:bg-primary/90 text-white text-sm font-bold leading-normal tracking-[0.015em] transition-colors shadow-lg shadow-blue-500/20">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span class="truncate">New Request</span>
+</button>
+</div>
+<!-- Filters -->
+<div class="flex gap-3 flex-wrap items-center">
+<span class="text-xs font-semibold uppercase tracking-wider text-[#4c669a] dark:text-gray-500 mr-2">Filter by:</span>
+<button class="group flex h-8 items-center justify-center gap-x-2 rounded-lg bg-white dark:bg-gray-800 border border-[#e7ebf3] dark:border-gray-700 pl-3 pr-2 hover:border-primary dark:hover:border-primary transition-colors shadow-sm">
+<div class="size-5 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px]">person</span>
+</div>
+<p class="text-[#0d121b] dark:text-white text-xs font-medium leading-normal">Technician: All</p>
+<span class="material-symbols-outlined text-[#4c669a] text-[18px]">arrow_drop_down</span>
+</button>
+<button class="group flex h-8 items-center justify-center gap-x-2 rounded-lg bg-white dark:bg-gray-800 border border-[#e7ebf3] dark:border-gray-700 pl-3 pr-2 hover:border-primary dark:hover:border-primary transition-colors shadow-sm">
+<div class="size-5 rounded-full bg-red-100 text-red-600 flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px]">priority_high</span>
+</div>
+<p class="text-[#0d121b] dark:text-white text-xs font-medium leading-normal">Priority: High</p>
+<span class="material-symbols-outlined text-[#4c669a] text-[18px]">arrow_drop_down</span>
+</button>
+<button class="group flex h-8 items-center justify-center gap-x-2 rounded-lg bg-white dark:bg-gray-800 border border-[#e7ebf3] dark:border-gray-700 pl-3 pr-2 hover:border-primary dark:hover:border-primary transition-colors shadow-sm">
+<div class="size-5 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px]">category</span>
+</div>
+<p class="text-[#0d121b] dark:text-white text-xs font-medium leading-normal">Asset Type: HVAC</p>
+<span class="material-symbols-outlined text-[#4c669a] text-[18px]">arrow_drop_down</span>
+</button>
+<button class="ml-auto text-sm text-[#4c669a] hover:text-primary underline">Clear filters</button>
+</div>
+</div>
+<!-- Kanban Board Columns -->
+<div class="flex-1 overflow-x-auto overflow-y-hidden px-6 pb-6">
+<div class="flex h-full gap-6 min-w-[1000px]">
+<!-- Column 1: New Requests -->
+<div class="flex flex-col w-1/4 min-w-[280px] h-full">
+<div class="flex items-center justify-between mb-4 px-1">
+<div class="flex items-center gap-2">
+<div class="size-2 rounded-full bg-gray-400"></div>
+<h3 class="text-[#0d121b] dark:text-white text-sm font-bold uppercase tracking-wider">New Requests</h3>
+<span class="bg-[#e7ebf3] dark:bg-gray-700 text-[#4c669a] dark:text-gray-300 px-2 py-0.5 rounded-full text-xs font-bold">3</span>
+</div>
+<button class="text-[#4c669a] hover:text-[#0d121b] dark:hover:text-white">
+<span class="material-symbols-outlined text-[20px]">more_horiz</span>
+</button>
+</div>
+<div class="flex-1 flex flex-col gap-3 overflow-y-auto pr-2 pb-2">
+<!-- Card 1 -->
+<div class="bg-white dark:bg-card-dark rounded-lg p-4 shadow-sm border border-transparent hover:border-primary/50 cursor-grab active:cursor-grabbing group transition-all">
+<div class="flex justify-between items-start mb-2">
+<span class="text-xs font-medium text-gray-500 font-mono">#REQ-1024</span>
+<div class="h-1.5 w-1.5 rounded-full bg-orange-500" title="Medium Priority"></div>
+</div>
+<h4 class="text-[#0d121b] dark:text-white font-bold text-sm mb-1">HVAC Unit #4</h4>
+<p class="text-gray-600 dark:text-gray-400 text-xs mb-4 line-clamp-2">Fan failure reported in Zone B. Makes loud rattling noise.</p>
+<div class="flex items-center justify-between border-t border-gray-100 dark:border-gray-700 pt-3">
+<div class="flex -space-x-2">
+<div class="size-6 rounded-full bg-gray-200 dark:bg-gray-700 border border-white dark:border-gray-800 flex items-center justify-center text-[10px] text-gray-500">?</div>
+</div>
+<div class="flex items-center gap-1 text-orange-600 bg-orange-50 dark:bg-orange-900/20 px-2 py-1 rounded text-[11px] font-semibold">
+<span class="material-symbols-outlined text-[14px]">schedule</span>
+<span>Due Tomorrow</span>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-white dark:bg-card-dark rounded-lg p-4 shadow-sm border border-transparent hover:border-primary/50 cursor-grab active:cursor-grabbing group transition-all">
+<div class="flex justify-between items-start mb-2">
+<span class="text-xs font-medium text-gray-500 font-mono">#REQ-1029</span>
+<div class="h-1.5 w-1.5 rounded-full bg-green-500" title="Low Priority"></div>
+</div>
+<h4 class="text-[#0d121b] dark:text-white font-bold text-sm mb-1">Forklift B - Warehouse</h4>
+<p class="text-gray-600 dark:text-gray-400 text-xs mb-4 line-clamp-2">Leaking hydraulic fluid near the rear axle.</p>
+<div class="flex items-center justify-between border-t border-gray-100 dark:border-gray-700 pt-3">
+<div class="flex -space-x-2">
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-6 border border-white dark:border-gray-800" data-alt="Technician Avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAsRQENjvYk7mcLVJs8JQgBcBaJJtLw9oKabParGRfeG9tMKQ_fhAdqwVF3gn4m7Lr4siaUCdMqt6lNH5tPXMDVqOd1QvUAyREs94I0ocSWRR-hXwehKrvE_TjeDoXWcm0gMbaiA6Np7X7Oc0giQO-XfecBkiZX0-EWfurqR1YDqmC29UhiNMoTOMZCqjRfcV2BlIQjFEaN4uoizD2EQ1xQk5DDLUxJq62y_kwzgfzdJpNJ_xUjGjrmJzCWGP5cdovjlEm5UMqfx5s");'></div>
+</div>
+<div class="flex items-center gap-1 text-gray-500 dark:text-gray-400 px-2 py-1 rounded text-[11px] font-medium">
+<span class="material-symbols-outlined text-[14px]">calendar_today</span>
+<span>Oct 24</span>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-white dark:bg-card-dark rounded-lg p-4 shadow-sm border border-transparent hover:border-primary/50 cursor-grab active:cursor-grabbing group transition-all">
+<div class="flex justify-between items-start mb-2">
+<span class="text-xs font-medium text-gray-500 font-mono">#REQ-1033</span>
+<div class="h-1.5 w-1.5 rounded-full bg-red-500" title="High Priority"></div>
+</div>
+<h4 class="text-[#0d121b] dark:text-white font-bold text-sm mb-1">Main Entrance Gate</h4>
+<p class="text-gray-600 dark:text-gray-400 text-xs mb-4 line-clamp-2">Sensor malfunction, gate stuck in open position.</p>
+<div class="flex items-center justify-between border-t border-gray-100 dark:border-gray-700 pt-3">
+<div class="flex -space-x-2">
+<div class="size-6 rounded-full bg-gray-200 dark:bg-gray-700 border border-white dark:border-gray-800 flex items-center justify-center text-[10px] text-gray-500">?</div>
+</div>
+<div class="flex items-center gap-1 text-gray-500 dark:text-gray-400 px-2 py-1 rounded text-[11px] font-medium">
+<span class="material-symbols-outlined text-[14px]">calendar_today</span>
+<span>Oct 25</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Column 2: In Progress -->
+<div class="flex flex-col w-1/4 min-w-[280px] h-full">
+<div class="flex items-center justify-between mb-4 px-1">
+<div class="flex items-center gap-2">
+<div class="size-2 rounded-full bg-primary animate-pulse"></div>
+<h3 class="text-[#0d121b] dark:text-white text-sm font-bold uppercase tracking-wider">In Progress</h3>
+<span class="bg-primary/10 text-primary px-2 py-0.5 rounded-full text-xs font-bold">2</span>
+</div>
+<button class="text-[#4c669a] hover:text-[#0d121b] dark:hover:text-white">
+<span class="material-symbols-outlined text-[20px]">more_horiz</span>
+</button>
+</div>
+<div class="flex-1 flex flex-col gap-3 overflow-y-auto pr-2 pb-2">
+<!-- Active Card 1 (Overdue) -->
+<div class="bg-white dark:bg-card-dark rounded-lg p-4 shadow-[0_4px_6px_-1px_rgba(239,68,68,0.1)] border-l-4 border-l-red-500 cursor-grab active:cursor-grabbing group transition-all">
+<div class="flex justify-between items-start mb-2">
+<span class="text-xs font-medium text-gray-500 font-mono">#REQ-0998</span>
+<div class="flex items-center gap-1 text-red-600 bg-red-50 dark:bg-red-900/20 px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">
+                                    Critical
+                                </div>
+</div>
+<h4 class="text-[#0d121b] dark:text-white font-bold text-sm mb-1">Conveyor Belt Main</h4>
+<p class="text-gray-600 dark:text-gray-400 text-xs mb-4 line-clamp-2">Motor overheating during peak load. Production impact high.</p>
+<div class="flex items-center justify-between border-t border-gray-100 dark:border-gray-700 pt-3">
+<div class="flex -space-x-2">
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-6 border border-white dark:border-gray-800" data-alt="John D Technician" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAX3jMg9KpWfgGBS08s_icqDqmOxf1NS2AA9Ki3RNyLMKDawu38k_rTaC4D6I02grLxPTDrKrv7T4r2VpVT0S3G9CgNVA5bTjqgee-t38cZCAfoHVlirqLNovlimRpYOyDNTMMMYGiiy8k3WQdYDAhNhF7aFJcgtsuPu32pZjGIAvsoY26Cczhd1a14KenZMTvEV2GzmTlsIJgRy0SOhgIWB9jDsjtLItVu-aG9YRxYsyPSVfqklJLIaTgjyyvmMMNwp9CKOQ5V-78");'></div>
+</div>
+<div class="flex items-center gap-1 text-red-600 font-bold text-[11px]">
+<span class="material-symbols-outlined text-[14px]">warning</span>
+<span>Overdue (2d)</span>
+</div>
+</div>
+</div>
+<!-- Active Card 2 -->
+<div class="bg-white dark:bg-card-dark rounded-lg p-4 shadow-sm border border-transparent hover:border-primary/50 cursor-grab active:cursor-grabbing group transition-all">
+<div class="flex justify-between items-start mb-2">
+<span class="text-xs font-medium text-gray-500 font-mono">#REQ-1011</span>
+<div class="h-1.5 w-1.5 rounded-full bg-orange-500" title="Medium Priority"></div>
+</div>
+<h4 class="text-[#0d121b] dark:text-white font-bold text-sm mb-1">Loading Dock Light</h4>
+<p class="text-gray-600 dark:text-gray-400 text-xs mb-4 line-clamp-2">Fixture replacement required. Parts on site.</p>
+<div class="flex items-center justify-between border-t border-gray-100 dark:border-gray-700 pt-3">
+<div class="flex -space-x-2">
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-6 border border-white dark:border-gray-800" data-alt="Technician Sarah" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAiVl2CmAS1x1_EcfeR5SoKH-lmzhADadkaNw-EwhBQsDZtoUmB8dmZI-drGK5zjo6lrVhGferFc8YCKTiLQMszWVQ8Cm4RoGQCzYSvLZCCLNn-onJWJmy-YwS8uROYbvldTOy4WljgJArs8MkU10EALsMEf93YOUREDNCRQK-xzHxcdGh987h6Le4HWzAhEKkP10JhD5OAGdew93v8tqHjdzbYuwE9mZ_bP8rdpQFbAHxDtnb9R39AYHffSHEdP1QS9B6XoGt4Rc8");'></div>
+</div>
+<div class="flex items-center gap-1 text-primary bg-primary/5 px-2 py-1 rounded text-[11px] font-medium">
+<span class="material-symbols-outlined text-[14px]">timelapse</span>
+<span>In Progress</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Column 3: Repaired -->
+<div class="flex flex-col w-1/4 min-w-[280px] h-full">
+<div class="flex items-center justify-between mb-4 px-1">
+<div class="flex items-center gap-2">
+<div class="size-2 rounded-full bg-green-500"></div>
+<h3 class="text-[#0d121b] dark:text-white text-sm font-bold uppercase tracking-wider">Repaired</h3>
+<span class="bg-[#e7ebf3] dark:bg-gray-700 text-[#4c669a] dark:text-gray-300 px-2 py-0.5 rounded-full text-xs font-bold">1</span>
+</div>
+<button class="text-[#4c669a] hover:text-[#0d121b] dark:hover:text-white">
+<span class="material-symbols-outlined text-[20px]">more_horiz</span>
+</button>
+</div>
+<div class="flex-1 flex flex-col gap-3 overflow-y-auto pr-2 pb-2">
+<!-- Repaired Card 1 -->
+<div class="bg-white dark:bg-card-dark rounded-lg p-4 shadow-sm border border-transparent hover:border-primary/50 cursor-grab active:cursor-grabbing group transition-all opacity-80 hover:opacity-100">
+<div class="flex justify-between items-start mb-2">
+<span class="text-xs font-medium text-gray-500 font-mono">#REQ-1005</span>
+<div class="h-1.5 w-1.5 rounded-full bg-green-500" title="Low Priority"></div>
+</div>
+<h4 class="text-[#0d121b] dark:text-white font-bold text-sm mb-1 decoration-green-500/30">Server Room AC</h4>
+<p class="text-gray-600 dark:text-gray-400 text-xs mb-4 line-clamp-2">Filter replacement and coil cleaning.</p>
+<div class="flex items-center justify-between border-t border-gray-100 dark:border-gray-700 pt-3">
+<div class="flex -space-x-2">
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-6 border border-white dark:border-gray-800" data-alt="Technician Sarah" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA1HwfIbroE6Tm6U3sxXfAMgRu6Em7HlWzoqWgGSlplnj2z42p7-w-V2Q-k51DQj6CNP-CkcKF2O97UDHblqQGZuzybwDr_R2J2zODgVAnhHMTza0v4kkxQ386IFVomk3eQkEN7JPqjwXV7TdCPWA91-aFw80_wr67gvWXaNhNB8cxOhr1_kEpHQMVqSlMKJRwdceurw44SXRxIELKhDeis70D8uOyHxcoL5F4_lbFx7ZIAEVlVtUANUoemkz-Enx2nQKO8WkMwy10");'></div>
+</div>
+<div class="flex items-center gap-1 text-green-600 bg-green-50 dark:bg-green-900/20 px-2 py-1 rounded text-[11px] font-medium">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+<span>Done Today</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Column 4: Scrap -->
+<div class="flex flex-col w-1/4 min-w-[280px] h-full">
+<div class="flex items-center justify-between mb-4 px-1">
+<div class="flex items-center gap-2">
+<div class="size-2 rounded-full bg-gray-600"></div>
+<h3 class="text-[#0d121b] dark:text-white text-sm font-bold uppercase tracking-wider">Scrap / Salvage</h3>
+<span class="bg-[#e7ebf3] dark:bg-gray-700 text-[#4c669a] dark:text-gray-300 px-2 py-0.5 rounded-full text-xs font-bold">1</span>
+</div>
+<button class="text-[#4c669a] hover:text-[#0d121b] dark:hover:text-white">
+<span class="material-symbols-outlined text-[20px]">more_horiz</span>
+</button>
+</div>
+<div class="flex-1 flex flex-col gap-3 overflow-y-auto pr-2 pb-2">
+<!-- Scrap Card 1 -->
+<div class="bg-white dark:bg-card-dark rounded-lg p-4 shadow-sm border border-transparent hover:border-primary/50 cursor-grab active:cursor-grabbing group transition-all">
+<div class="flex justify-between items-start mb-2">
+<span class="text-xs font-medium text-gray-500 font-mono">#REQ-0955</span>
+<div class="h-1.5 w-1.5 rounded-full bg-gray-500" title="Low Priority"></div>
+</div>
+<h4 class="text-[#0d121b] dark:text-white font-bold text-sm mb-1">Drill Press #2</h4>
+<p class="text-gray-600 dark:text-gray-400 text-xs mb-4 line-clamp-2">Motor burnout beyond repair threshold. Pending manager approval.</p>
+<div class="flex items-center justify-between border-t border-gray-100 dark:border-gray-700 pt-3">
+<div class="flex -space-x-2">
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-6 border border-white dark:border-gray-800" data-alt="Technician Mike" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAEpqQuZbH9EUC9EwhhIiBAcHfjFARH_MRT-G10kpGJFKrno5fELBTDowbfvfQyNsspJTg2r4i0v8hCBOkcA--mcY8UQKlMxLKFzRQtuREtdO279qUOjrO9_lQ_rOFkzOSKuTIEe5687dPQTYeYhvo9feom54YbOobrwYZMdZaMDs2w3byVrcFLog3ITD82dM2rbels0H2mcvenw4zQXn1K760o9e-BFJou0eZ41CpJzSTbEPxL7LdcqaeQNx_crrX0jY48x-4e4EA");'></div>
+</div>
+<div class="flex items-center gap-1 text-gray-500 dark:text-gray-400 px-2 py-1 rounded text-[11px] font-medium">
+<span class="material-symbols-outlined text-[14px]">pending</span>
+<span>Approval</span>
+</div>
+</div>
+</div>
+<!-- Drag Target Placeholder (Simulated) -->
+<div class="drag-ghost rounded-lg h-24 flex items-center justify-center">
+<p class="text-primary/50 text-xs font-medium">Drop items here</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>
